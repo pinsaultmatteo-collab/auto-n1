@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "auton1-site", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "cd site && exec python3 -m http.server 8790 --bind 127.0.0.1"], "port": 8790 }
+  ]
+}

@@ -1,0 +1,112 @@
+<!--meta
+title: Ford Transit Custom cabine approfondie SPECIPRO — configurez, à partir de 55 900 € HT | AUTO N°1
+description: Ford Transit Custom cabine approfondie SPECIPRO : de 2 à 7 places en 3 minutes, à partir de 55 900 € HT en Sport 170 ch BVA8. Configurez finition, coloris, places et options, visualisez en 3D. Neuf, disponible à Wimereux.
+path: vehicules/ford-transit-custom-cabine-approfondie.html
+canonical: ford-transit-custom-cabine-approfondie
+page: vehicules
+scripts: three
+ogimg: transit-sport-gris-sieges.jpg
+-->
+<section class="page-hero page-hero--compact">
+  <div class="page-hero__bg"><img src="../assets/img/transit-gris-sieges-face.jpg" alt="Ford Transit Custom cabine approfondie avec sièges déposés"></div>
+  <div class="container">
+    <div class="crumbs"><a href="../index.html">Accueil</a><i></i><a href="ford-transit-custom.html">Ford Transit Custom</a><i></i><span>Cabine approfondie</span></div>
+    <span class="eyebrow">Ford × SPECIPRO</span>
+    <h1 class="mt-1">Ford Transit Custom cabine approfondie</h1>
+    <p class="lead">Composez votre Transit Custom SPECIPRO : finition, motorisation, coloris, nombre de places et options. Le prix se met à jour, le véhicule aussi. Puis nous validons ensemble la configuration finale et la disponibilité, sous 24 h.</p>
+  </div>
+</section>
+
+<section class="section" id="configurateur">
+  <div class="tech-grid"></div>
+  <div class="container">
+    <form id="configurator" class="config" data-base="55900" data-demo>
+      <div class="config__visual">
+        <canvas id="config-canvas" aria-label="Aperçu 3D du véhicule configuré"></canvas>
+        <span class="tag">Aperçu 3D indicatif</span>
+        <div class="seg" style="position:absolute;right:16px;bottom:16px;background:rgba(10,10,11,.6);backdrop-filter:blur(8px)"><button type="button" data-view="config" class="is-active">Carrosserie</button><button type="button" data-view="xray">Vue technique</button></div>
+      </div>
+      <div class="config__panel">
+        <div class="field"><label for="cfg-fin">Finition</label><select id="cfg-fin" name="finition" class="input"><option value="sport">Sport — 5 sièges, carte grise 7 places</option><option value="trend" data-quote="1">Trend — sur devis</option><option value="limited" data-quote="1">Limited — sur devis</option><option value="trail" data-quote="1">Trail 4x4 — sur devis</option><option value="msrt" data-quote="1">MS-RT — sur devis</option></select></div>
+        <div class="field"><label for="cfg-mot">Motorisation</label><select id="cfg-mot" name="motorisation" class="input"><option value="170bva8">2.0 EcoBlue 170 ch — BVA8 (boîte automatique)</option><option value="150" data-quote="1">2.0 EcoBlue 150 ch — sur devis</option><option value="136" data-quote="1">2.0 EcoBlue 136 ch BVM6 — sur devis</option><option value="phev" data-quote="1">Hybride rechargeable PHEV — sur devis</option></select></div>
+        <div class="field"><label>Coloris</label><div class="swatches">
+          <button type="button" class="swatch is-active" data-color="#3a3d42" style="background:#3a3d42"><span>Gris Magnetic</span></button>
+          <button type="button" class="swatch" data-color="#0d0e11" style="background:#0d0e11"><span>Noir Agathe</span></button>
+          <button type="button" class="swatch" data-color="#6d7178" style="background:#6d7178"><span>Gris Matter</span></button>
+          <button type="button" class="swatch" data-color="#a3a8ad" style="background:#a3a8ad"><span>Gris Lunaire</span></button>
+          <button type="button" class="swatch" data-color="#3d7fc2" style="background:#3d7fc2"><span>Bleu Azur</span></button>
+          <button type="button" class="swatch" data-color="#b3111c" style="background:#b3111c"><span>Rouge Artisan</span></button>
+          <button type="button" class="swatch" data-color="#e9ebea" style="background:#e9ebea"><span>Blanc</span></button>
+        </div></div>
+        <div class="field"><label>Places</label><div class="opts">
+          <label class="opt"><input type="radio" name="places" value="5" checked style="border-radius:50%"><b>5 sièges <small>2 rangs — carte grise 7 places — inclus</small></b><em>Inclus</em></label>
+          <label class="opt"><input type="radio" name="places" value="7" style="border-radius:50%"><b>7 sièges <small>3 rangs — 2 sièges individuels supplémentaires</small></b><em>+ 1 090 € HT</em></label>
+        </div></div>
+        <div class="field"><label>Options</label><div class="opts">
+          <label class="opt"><input type="checkbox" name="opt" value="table" data-price="650" data-label="Table amovible sur rail"><b>Table amovible sur rail <small>Se clipse entre les sièges face à face</small></b><em>+ 650 € HT</em></label>
+          <label class="opt"><input type="checkbox" name="opt" value="cloison" data-price="290" data-label="2e cloison amovible étanche R1"><b>2e cloison amovible étanche R1 <small>Attache rapide, 2 minutes</small></b><em>+ 290 € HT</em></label>
+          <label class="opt"><input type="checkbox" name="opt" value="pivot" data-price="995" data-label="Sièges conducteur et passager pivotants 180°"><b>Sièges avant pivotants à 180° <small>Conducteur et passager</small></b><em>+ 995 € HT</em></label>
+        </div></div>
+        <div class="pricebox">
+          <span class="dim">Votre configuration</span>
+          <div class="total" id="cfg-total">55 900 € <em>HT</em></div>
+          <ul id="cfg-lines"></ul>
+          <p class="note" id="cfg-sub">Prix indicatif hors frais d'immatriculation. Disponibilité : sur stock ou arrivage.</p>
+          <div class="form__fields"><a class="btn btn--primary" href="../contact.html#devis" id="cfg-quote" style="justify-content:center"><span>Réserver cette configuration</span></a></div>
+          <p class="note">Inclus de série sur notre prestation : cloison R1, rails d'arrimage à crochets rapides, caissons de passage de roues, attelage, LED à induction rang arrière, capitonnage complet et pavillon feutriné. Garantie 24 mois. Offre de financement soumise à conditions et à acceptation du dossier par l'organisme prêteur.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section light">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow reveal">Équipements de série</span>
+        <h2 class="h2 split-lines mt-1"><span class="line"><span>Version Sport,</span></span><span class="line"><span>livrée <span class="outline">complète.</span></span></span></h2>
+        <p class="lead reveal mt-2">Le Transit Custom Sport L2H1 2025, 2.0 EcoBlue 170 ch BVA8, cabine SPECIPRO 5 sièges (carte grise 7 places), tel que nous le livrons.</p>
+        <table class="spec-table mt-3 reveal">
+          <tr><th>Confort</th><td>Climatisation automatique bi-zone, sièges individuels inclinables et démontables, cloison démontable positionnable, sièges sur rails</td></tr>
+          <tr><th>Sécurité &amp; conduite</th><td>Régulateur / limiteur, alerte de changement de voie, alarme volumétrique, roue de secours conventionnelle, écrous antivol</td></tr>
+          <tr><th>Pratique</th><td>Réservoir 70 L, jantes alliage 17", bac de rangement central, prises 12 V et 230 V, crochet d'attelage, galerie de toit rétractable, deux portes latérales, becquet</td></tr>
+          <tr><th>Standard AUTO N°1 2025</th><td>Caisson de passage de roues avec ouverture, rails d'arrimage à crochets rapides dans le compartiment de chargement, LED à induction pour les passagers arrière, capitonnage complet de la cellule et pavillon feutriné</td></tr>
+          <tr><th>Chargement</th><td>Longueur évolutive : 1 700 / 1 970 mm au sol, 1 400 / 1 670 mm à un mètre de hauteur</td></tr>
+          <tr><th>Homologation</th><td>Carte grise CTTE N1 — TVA récupérable, exonération de la taxe sur les véhicules utilisés à des fins économiques</td></tr>
+          <tr><th>Garantie</th><td>24 mois</td></tr>
+        </table>
+      </div>
+      <div class="mosaic reveal">
+        <div class="media span-2 row-2"><img src="../assets/img/transit-sport-gris-sieges.jpg" alt="Transit Custom Sport avec sièges déposés" loading="lazy"></div>
+        <div class="media"><img src="../assets/img/rang-3-sieges-2.jpg" alt="Rangée de trois sièges" loading="lazy"></div>
+        <div class="media"><img src="../assets/img/interieur-sieges-bleus.jpg" alt="Sièges avec surpiqûres" loading="lazy"></div>
+        <div class="media span-2"><img src="../assets/img/interieur-table-portes-ouvertes.jpg" alt="Table et sièges, portes ouvertes" loading="lazy"></div>
+        <div class="media"><img src="../assets/img/sieges-cuir-avant-2.jpg" alt="Sièges avant" loading="lazy"></div>
+        <div class="media"><img src="../assets/img/interieur-sieges-table-2.jpg" alt="Sièges et table" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split" style="align-items:start">
+      <div><span class="eyebrow reveal">Questions fréquentes</span><h2 class="h2 split-lines mt-1"><span class="line"><span>Avant de <span class="outline">réserver.</span></span></span></h2></div>
+      <div class="faq reveal">
+        <details open><summary>Le prix affiché est-il définitif ?<i></i></summary><div class="faq__body">Le prix de 55 900 € HT correspond au Transit Custom Sport L2H1 170 ch BVA8 cabine SPECIPRO 5 sièges tel que décrit. Les options sont indiquées HT. Les autres finitions et motorisations sont chiffrées sur devis personnalisé, sous 24 h. Les frais d'immatriculation sont en sus.</div></details>
+        <details><summary>Quelles solutions de financement ?<i></i></summary><div class="faq__body">Crédit-bail, crédit classique ou location longue durée, avec garanties financières en cas de vol, incendie ou destruction. Nous étudions avec vous la formule la plus adaptée à votre société. Offre soumise à conditions et à acceptation du dossier par l'organisme prêteur.</div></details>
+        <details><summary>Quel délai de livraison ?<i></i></summary><div class="faq__body">Pour un véhicule en stock, quelques jours suffisent pour l'immatriculation et la préparation. Pour une configuration sur commande, nous vous communiquons un délai ferme avec le devis. La livraison dans votre entreprise est possible partout en France.</div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="cta-band reveal"><div class="cta-band__pattern"></div><div class="cta-band__24" aria-hidden="true">24h</div>
+      <div class="cta-band__inner"><div><span class="eyebrow" style="color:#fff">Réservation</span><h2 class="mt-1">Cette configuration<br>vous ressemble ?</h2><p>Envoyez-la nous : nous vérifions la disponibilité, affinons les options avec vous et revenons sous 24 h avec le devis et le plan de financement.</p></div>
+      <div class="btn-row" style="flex-direction:column;align-items:stretch"><a class="btn btn--white btn--lg" href="../contact.html#devis"><span>Réserver ma configuration</span></a><a class="btn btn--outline btn--lg" href="tel:+33321336396"><span>03 21 33 63 96</span></a></div></div>
+    </div>
+  </div>
+</section>

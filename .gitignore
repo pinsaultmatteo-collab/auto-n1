@@ -1,0 +1,5 @@
+# Documents confidentiels du client (CDC, pré-maquette, fiche de référence) — ne pas publier
+contexte/
+# Système
+.DS_Store
+**/.DS_Store
