@@ -733,3 +733,37 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   .soon__row{flex-direction:column}
   .soon__row .btn{width:100%;justify-content:center}
 }
+
+/* ---------- Mobile (01/10) : verrouillage horizontal + centrage ---------- */
+/* Aucun défilement latéral : clip ne crée pas de conteneur de scroll, les sections sticky restent fonctionnelles */
+html,body{overflow-x:clip}
+@supports not (overflow-x:clip){body{overflow-x:hidden}}
+@media (max-width:1000px){
+  .hero__main{grid-template-columns:minmax(0,1fr)}
+  .vehicles,.contact-grid,.config,.split,.manifesto{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  /* Les boutons peuvent passer à la ligne au lieu d'élargir la page */
+  .btn{white-space:normal;text-align:center;justify-content:center}
+  .hero__actions .btn--lg{padding:16px 20px;font-size:13px}
+  .hero__title{font-size:clamp(40px,12.4vw,64px)}
+  /* Hero centré */
+  .hero__main>div:first-child{text-align:center}
+  .hero .eyebrow{justify-content:center}
+  .hero .eyebrow::before{display:none}
+  /* Barre de navigation compacte : logo + devis + menu tiennent sur 375 px */
+  .nav .container{gap:12px}
+  .nav__logo img,.nav.is-scrolled .nav__logo img{height:30px}
+  .nav__cta{gap:8px}
+  .nav .btn--sm{white-space:nowrap;padding:11px 13px;font-size:11px;letter-spacing:.05em}
+  .burger{width:44px;height:44px}
+  .burger i{left:13px;right:13px}
+  .burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:21px}.burger i:nth-child(3){top:27px}
+  .burger.is-open i:nth-child(1),.burger.is-open i:nth-child(3){top:21px}
+  .hero__lead{margin-inline:auto}
+  .hero__actions{justify-content:center}
+  .hero__side{align-items:center;text-align:center;justify-self:stretch}
+  /* Note Google centrée */
+  .rating{align-items:center;text-align:center}
+  .rating__stars,.rating__src{justify-content:center}
+}
