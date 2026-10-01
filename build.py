@@ -2,11 +2,16 @@
 """Assemble les pages du site AUTO N°1 : src/pages/*.html + src/partials → site/.
 Usage : python3 build.py
 """
-import re, os, glob, datetime
+import re, os, glob, datetime, hashlib
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC, OUT = os.path.join(ROOT, 'src'), os.path.join(ROOT, 'site')
 partials = {n: open(os.path.join(SRC, 'partials', n + '.html'), encoding='utf8').read() for n in ('head', 'nav', 'footer')}
 pages = sorted(glob.glob(os.path.join(SRC, 'pages', '*.html')))
+# Empreinte de version des CSS/JS : invalide le cache navigateur (et le cache long Vercel) à chaque modification
+VERSIONED = ['assets/css/main.css', 'assets/js/main.js', 'assets/js/van3d.js', 'assets/fonts/fonts.css']
+def fingerprint(rel):
+    return hashlib.md5(open(os.path.join(OUT, rel), 'rb').read()).hexdigest()[:8]
+versions = {rel: fingerprint(rel) for rel in VERSIONED}
 urls = []
 for p in pages:
     raw = open(p, encoding='utf8').read()
@@ -20,6 +25,7 @@ for p in pages:
              'OGIMG': meta.get('ogimg', 'showroom-facade.jpg'), 'PAGE': meta.get('page', ''), 'BODYCLASS': meta.get('bodyclass', ''), 'SCRIPTS': scripts}
     html = partials['head'] + partials['nav'] + body + partials['footer']
     for k, v in vars_.items(): html = html.replace('{{' + k + '}}', v)
+    for rel, h in versions.items(): html = html.replace(root + rel + '"', root + rel + '?v=' + h + '"')
     out = os.path.join(OUT, path); os.makedirs(os.path.dirname(out), exist_ok=True)
     open(out, 'w', encoding='utf8').write(html)
     urls.append(vars_['CANONICAL']); print(f'  ✓ {path}')

@@ -27,14 +27,14 @@ site/                      ← livrable (à ouvrir / à héberger)
   assets/fonts/            Barlow Condensed + Manrope (woff2 locaux)
   assets/vendor/           three.min.js r158, gsap 3.12.5, ScrollTrigger
 
-src/                       ← sources : partials (head, nav, footer) + pages ; `python3 build.py` régénère site/
+src/                       ← sources : partials (head, nav, footer) + pages ; `python3 build.py` régénère site/ (empreinte ?v= ajoutée aux CSS/JS pour invalider le cache)
 contexte/                  ← fiche de référence, cahier des charges, pré-maquette
 ```
 
 ## Points à valider avec le client avant publication
 
 - Témoignages clients : textes illustratifs, à remplacer par le widget Google Business Profile (265 avis réels).
-- Portrait du dirigeant et photos équipe : shooting à planifier (emplacement prévu sur la page L'entreprise).
+- Portrait du dirigeant intégré (accueil et page L'entreprise). Photos d'équipe et d'atelier : shooting à planifier.
 - Horaires exacts (ouverture 8h45 confirmée, fermeture et samedi à confirmer) et numéro unique (03 21 33 63 96 retenu).
 - Mentions fiscales (TVA récupérable, exonération de la taxe sur les véhicules de société) : à valider par écrit par le client.
 - Prix : seul le Transit Custom Sport SPECIPRO à 55 900 € HT et les 4 options proviennent du site actuel ; les autres configurations sont « sur devis ».

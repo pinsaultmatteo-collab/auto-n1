@@ -16,8 +16,8 @@
 <link rel="icon" type="image/png" href="assets/img/logo-mark.png">
 <link rel="preload" href="assets/fonts/BarlowCondensed-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Manrope-500-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts/fonts.css">
-<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=a3c29b4c">
+<link rel="stylesheet" href="assets/css/main.css?v=88f6168e">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -129,8 +129,6 @@
     <div class="stat"><b>3<sup>min</sup></b><span>pour passer de 2 à 7 places</span></div>
     <div class="stat"><b>0<sup>mois</sup></b><span>d'attente : repartez avec votre véhicule</span></div>
   </div>
-  <div class="hero__hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="3" width="12" height="18" rx="6"/><path d="M12 7v4"/></svg> Déplacez la souris pour tourner autour du véhicule</div>
-  <div class="scroll-cue"><i></i>Défiler</div>
 </section>
 
 <div class="marquee" aria-hidden="true"><div class="marquee__track">
@@ -302,10 +300,20 @@
         <div class="variants"><span class="tag">4Motion</span><span class="tag">Toit relevable</span></div>
         <span class="link cta">Voir le Transporter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
-      <div class="vcard vcard--soon reveal" style="grid-column:1/-1;min-height:auto">
-        <span class="dim">Bientôt</span><h3>D'autres marques arrivent</h3>
-        <p>Toutes marques sur demande. Soyez informé en premier des nouveaux véhicules et arrivages.</p>
-        <form data-demo class="form"><div class="form__fields" style="display:flex;gap:8px;width:100%;max-width:460px"><input class="input" type="email" placeholder="votre@email.fr" required aria-label="Votre email"><button class="btn btn--primary" type="submit"><span>M'informer</span></button></div><div class="form__ok"><b>Merci !</b> Vous serez informé des prochains arrivages.</div></form>
+      <div class="soon reveal">
+        <div class="soon__text">
+          <span class="dim">Bientôt chez AUTO N°1</span>
+          <h3>D'autres marques arrivent</h3>
+          <p>Toutes marques sur demande. Soyez informé en premier des nouveaux véhicules et des arrivages, avant leur mise en ligne.</p>
+        </div>
+        <form data-demo class="form soon__form">
+          <div class="form__fields">
+            <label class="dim" for="soon-mail">Recevoir les arrivages</label>
+            <div class="soon__row"><input id="soon-mail" class="input" type="email" placeholder="votre@email.fr" required autocomplete="email"><button class="btn btn--primary" type="submit"><span>M'informer</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+            <small class="soon__legal">Un e-mail par arrivage, désinscription en un clic.</small>
+          </div>
+          <div class="form__ok"><b>Merci !</b> Vous serez informé des prochains arrivages.</div>
+        </form>
       </div>
     </div>
   </div>
@@ -339,7 +347,7 @@
 <section class="section" id="stock-home">
   <div class="container">
     <div class="section-head section-head--split">
-      <div><span class="eyebrow reveal">Disponibles immédiatement</span><h2 class="h2 split-lines mt-1"><span class="line"><span>En stock</span></span><span class="line"><span>à <span class="outline">Wimereux.</span></span></span></h2></div>
+      <div><span class="eyebrow reveal">Disponibles immédiatement</span><h2 class="h2 split-lines mt-1"><span class="line"><span>En stock à</span></span><span class="line"><span><span class="outline">Wimereux.</span></span></span></h2></div>
       <div class="reveal"><p class="lead">Des véhicules neufs aménagés, prêts à être immatriculés et livrés. Pendant que les constructeurs annoncent des mois de délai, vous repartez avec le vôtre.</p><a class="btn btn--ghost mt-2" href="stock.html"><span>Voir tout le stock</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
     </div>
     <div class="grid stock-grid">
@@ -354,9 +362,9 @@
 <section class="section dark-2" id="dirigeant">
   <div class="container">
     <div class="manifesto">
-      <div class="manifesto__media img-reveal">
-        <img src="assets/img/showroom-facade.jpg" alt="Showroom AUTO N°1 à Wimereux" loading="lazy">
-        <div class="plate"><img src="assets/img/logo-mark.png" alt=""><div><b>Showroom de Wimereux</b><small>30 rue du Baston · Côte d'Opale · depuis 2020</small></div></div>
+      <div class="manifesto__media manifesto__media--portrait img-reveal">
+        <img src="assets/img/jean-antoine-blanchard.jpg" alt="Jean Antoine Blanchard, président d'AUTO N°1" loading="lazy" width="800" height="800">
+        <div class="plate"><img src="assets/img/logo-mark.png" alt=""><div><b>Jean Antoine Blanchard</b><small>Président d'AUTO N°1 · Wimereux</small></div></div>
       </div>
       <div>
         <span class="eyebrow reveal">De dirigeant à dirigeant</span>
@@ -453,9 +461,9 @@
   <div class="row"><button class="btn btn--primary btn--sm" data-consent="all"><span>Accepter</span></button><button class="btn btn--ghost btn--sm" data-consent="none"><span>Refuser</span></button></div>
 </div>
 <script src="assets/vendor/three.min.js"></script>
-<script src="assets/js/van3d.js"></script>
+<script src="assets/js/van3d.js?v=959fb6c1"></script>
 <script src="assets/vendor/gsap.min.js"></script>
 <script src="assets/vendor/ScrollTrigger.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v=815da8e0"></script>
 </body>
 </html>
