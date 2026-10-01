@@ -798,3 +798,14 @@ html,body{overflow-x:clip}
   .step h3{font-size:clamp(28px,7.2vw,40px)}
   .step p{font-size:16px}
 }
+
+/* ---------- Mobile (01/10) : cartes « Notre promesse » centrées ---------- */
+@media (max-width:640px){
+  .pillar{text-align:center}
+  .pillar .dim{position:static;display:block;margin-bottom:10px}
+  .pillar__ico{justify-content:center}
+  .pillar__ico svg{margin-inline:auto}
+  .pillar p{margin-inline:auto;max-width:34ch}
+  .pillar::before{left:50%;right:auto;width:64px;transform:translateX(-50%) scaleX(0);transform-origin:center}
+  .pillar:hover::before,.pillar.in-view::before{transform:translateX(-50%) scaleX(1)}
+}
