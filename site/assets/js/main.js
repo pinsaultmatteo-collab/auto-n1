@@ -88,9 +88,13 @@
   if (tCanvas && window.AutoN1Van) {
     const van = AutoN1Van.create(tCanvas, { preset: 'cargo', color: '#464a52', xray: 1, seats: 2, cargo: 1, mouseArea: $('.transform__visual') });
     if (van) {
-      const steps = $$('.step'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
+      const steps = $$('.step'), tabs = $$('.ttab'), tabsWrap = $('.transform__tabs'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
+      const mqMobile = window.matchMedia('(max-width: 1000px)');
+      let current = 0, triggers = [], stepIo = null, timer = null;
       const activate = i => {
+        current = i;
         steps.forEach((s, j) => s.classList.toggle('is-active', j === i));
+        tabs.forEach((t, j) => { t.classList.toggle('is-active', j === i); t.setAttribute('aria-selected', j === i); });
         const s = steps[i]; if (!s) return;
         van.apply(s.dataset.preset);
         if (day) { day.style.opacity = 0; setTimeout(() => { day.textContent = s.dataset.day || ''; day.style.opacity = 1; }, 200); }
@@ -98,9 +102,27 @@
         if (hudMode) hudMode.textContent = s.dataset.mode || '';
         if (hudTime) hudTime.textContent = s.dataset.time || '';
       };
-      if (hasGsap) steps.forEach((s, i) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 45%', onEnter: () => activate(i), onEnterBack: () => activate(i) }));
-      else { const sio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) activate(steps.indexOf(e.target)); }), { threshold: 0.5 }); steps.forEach(s => sio.observe(s)); }
-      activate(0);
+      // Desktop : la 3D reste épinglée, les étapes défilent
+      const setupDesktop = () => {
+        if (hasGsap) triggers = steps.map((s, i) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 45%', onEnter: () => activate(i), onEnterBack: () => activate(i) }));
+        else { stepIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) activate(steps.indexOf(e.target)); }), { threshold: 0.5 }); steps.forEach(s => stepIo.observe(s)); }
+        activate(0);
+      };
+      const teardownDesktop = () => { triggers.forEach(t => t.kill()); triggers = []; if (stepIo) { stepIo.disconnect(); stepIo = null; } };
+      // Mobile : onglets, défilement automatique toutes les 5 s, balayage sur la 3D
+      const stopAuto = () => { if (timer) clearInterval(timer); timer = null; };
+      const startAuto = () => { stopAuto(); if (reduce) return; tabsWrap && tabsWrap.classList.remove('is-paused'); timer = setInterval(() => activate((current + 1) % steps.length), 5000); };
+      const userPick = i => { stopAuto(); tabsWrap && tabsWrap.classList.add('is-paused'); activate((i + steps.length) % steps.length); };
+      const setupMobile = () => { activate(0); startAuto(); };
+      tabs.forEach((t, i) => t.addEventListener('click', () => userPick(i)));
+      const swipeArea = $('.transform__visual'); let x0 = null;
+      if (swipeArea) {
+        swipeArea.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+        swipeArea.addEventListener('touchend', e => { if (x0 == null || !mqMobile.matches) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) userPick(current + (dx < 0 ? 1 : -1)); }, { passive: true });
+      }
+      const applyMode = () => { if (mqMobile.matches) { teardownDesktop(); setupMobile(); } else { stopAuto(); setupDesktop(); } };
+      applyMode();
+      mqMobile.addEventListener('change', applyMode);
     }
   }
 
