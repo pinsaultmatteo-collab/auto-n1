@@ -32,6 +32,7 @@ site/                      ← livrable (à ouvrir / à héberger)
   sitemap.xml · robots.txt
   assets/css/main.css      Design system complet (tokens, composants, responsive)
   assets/js/van3d.js       Fourgon 3D procédural (Three.js) : sièges 2/5/7, toit relevable, rayons X, 4x4, couleur
+  src/tools/hero_plan.py   Générateur du plan isométrique du hero (SVG inline) : relancer puis build.py après modification
   assets/js/main.js        Navigation, animations au scroll, compteurs, configurateur, filtres, formulaires (démo)
   assets/img/              64 photos réelles issues du site actuel (renommées, optimisées)
   assets/brand/            logos SVG de la nouvelle charte + kit favicon

@@ -772,3 +772,73 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .engage__tile p{color:var(--graphite);font-size:15px}
 @media (max-width:1000px){.engage__grid{grid-template-columns:1fr}}
 @media (max-width:640px){.engage__tiles{grid-template-columns:1fr}.engage__kf{grid-template-columns:1fr;text-align:center}.engage__kf>b{margin-inline:auto}}
+
+/* ---------- Hero « plan d'atelier » : dessin technique isométrique ---------- */
+.hero--plan{display:block;position:relative;min-height:calc(100svh - var(--nav-h));margin-top:var(--nav-h);background:var(--anthracite);overflow:hidden;padding:0;gap:0}
+.hero__plan-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(24px,4vw,64px);align-items:center;min-height:calc(100svh - var(--nav-h));padding:clamp(40px,5vw,64px) 0}
+.hero__copy{max-width:560px}
+.hero--plan .hero__title{font-size:clamp(38px,4.3vw,62px);margin-top:20px}
+.hero--plan .hero__lead{font-size:clamp(16px,1.15vw,18px);margin-top:18px;max-width:48ch}
+.hero--plan .hero__actions{margin-top:26px}
+.hero__proof{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.hero__proof li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--beton);font-weight:600}
+.hero__proof li::before{content:"";width:7px;height:7px;background:var(--rouge);transform:rotate(45deg);flex:0 0 7px}
+.hero__plan{position:relative}
+.plan{width:108%;margin-left:-4%;height:auto;overflow:visible;display:block}
+.plan .ln{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter;vector-effect:non-scaling-stroke;transition:stroke .4s}
+.plan .ln.main{stroke-width:2.2}
+.plan .ln.hidden{stroke:rgba(207,203,195,.32);stroke-width:1;stroke-dasharray:5 6}
+.plan .ln.ghost{stroke:rgba(207,203,195,.28);stroke-width:1;stroke-dasharray:3 6}
+.plan .ln.seam{stroke:rgba(255,255,255,.4);stroke-width:1}
+.plan .ln.red-line{stroke:var(--rouge);stroke-width:2}
+.plan .ln.rim{stroke:rgba(255,255,255,.6);stroke-width:1.1}
+.plan .ln.hub{stroke:var(--rouge);stroke-width:1.5}
+.plan .ln.floor{stroke:rgba(207,203,195,.4);stroke-width:1}
+.plan .ln.rail{stroke:var(--rouge);stroke-width:1.2;opacity:.75}
+.plan .fill{stroke:rgba(255,255,255,.7);stroke-width:1.1;vector-effect:non-scaling-stroke;transition:fill .4s}
+.plan .fill.glass{fill:#3B4048}
+.plan .fill.lamp{fill:#fff;stroke:none}
+.plan .fill.tire{fill:#17191C}
+.plan .fill.wall{fill:rgba(207,203,195,.1);stroke:rgba(207,203,195,.6);stroke-width:1}
+.plan .fill.bellows{fill:rgba(207,203,195,.2);stroke:rgba(255,255,255,.7)}
+.plan .fill.panel{fill:#3B4048;stroke:none}
+.plan .fill.bed{fill:rgba(207,203,195,.45);stroke:none}
+.plan .f-top{fill:#5B5F66}.plan .f-front{fill:#3B4048}.plan .f-side{fill:#2a2e34}
+.plan .f-top,.plan .f-front,.plan .f-side{stroke:rgba(255,255,255,.5);stroke-width:1;vector-effect:non-scaling-stroke;transition:fill .4s}
+.plan .seat{opacity:0;transform:scale(.6);transform-box:fill-box;transform-origin:center;transition:opacity .5s var(--ease),transform .55s cubic-bezier(.34,1.56,.64,1)}
+.plan .seat.in,.plan.static .seat{opacity:1;transform:none}
+.plan .table{opacity:.9}
+.plan .hot .f-top{fill:var(--rouge)}.plan .hot .f-front{fill:#9b0c24}.plan .hot .f-side{fill:#7e0a1e}
+.plan .hot.ln,.plan .hot .ln{stroke:var(--rouge)}
+.plan .hot.fill{stroke:var(--rouge)}
+.plan .pop-open{opacity:0}
+.plan .dim{opacity:1}
+.plan .dim .dimline{stroke:rgba(207,203,195,.55);stroke-width:1}
+.plan .dimtxt{font-family:var(--font);font-weight:600;font-size:13px;fill:var(--beton);letter-spacing:.12em}
+.plan .callout{opacity:0}
+.plan .callout .leader{stroke:var(--rouge);stroke-width:1.4}
+.plan .callout .diamond{fill:var(--rouge)}
+.plan .callout .box{fill:var(--anthracite);stroke:var(--beton);stroke-width:1}
+.plan .ltitle{font-family:var(--font);font-weight:600;font-size:13px;fill:var(--beton);letter-spacing:.14em}
+.plan .lvalue{font-family:var(--font);font-weight:700;font-size:19px;fill:#fff}
+.hero__plan-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:14px;flex-wrap:wrap}
+.hero__plan-foot .eyebrow{font-size:11px;color:var(--muted)}
+.hero__plan-step{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+.hero__plan-step::before{content:"";width:7px;height:7px;background:var(--rouge);transform:rotate(45deg);animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (max-width:1000px){
+  .hero__plan-grid{grid-template-columns:1fr;align-items:start;min-height:0;padding:28px 0 56px;gap:28px}
+  .hero__plan{order:-1}
+  .hero__copy{max-width:none}
+  .plan{width:100%;margin-left:0}
+  .plan .callout .label,.plan .dim{display:none}
+  .hero__plan-step{font-size:13px;color:#fff}
+}
+@media (max-width:640px){
+  .hero__copy{text-align:center}
+  .hero--plan .hero__lead{margin-inline:auto}
+  .hero--plan .hero__actions{justify-content:center;flex-direction:column}
+  .hero__proof{justify-content:center}
+  .hero--plan .hero__title{font-size:clamp(34px,9.6vw,46px)}
+  .hero__plan-foot{flex-direction:column;align-items:flex-start;gap:8px}
+}

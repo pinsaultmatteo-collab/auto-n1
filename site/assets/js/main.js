@@ -89,6 +89,45 @@
     }
   }
 
+  /* ---------- Hero : plan d'atelier isométrique ---------- */
+  const plan = $('#hero-plan svg');
+  if (plan) {
+    const all = $$('.ln', plan);
+    const lines = all.filter(l => !l.closest('.callout') && !l.closest('.dim') && !l.closest('.pop-open'));
+    const seats = $$('.seat', plan), callouts = $$('.callout', plan), dims = $$('.dim', plan), dimLines = $$('.dim .ln', plan);
+    const popOpen = $('#pop-open', plan), popClosed = $('#pop-closed', plan), stepEl = $('#plan-step');
+    const hotTargets = [seats, [popOpen], $$('.wheel', plan).concat($$('.hub', plan)), [$('.ln.main', plan)]];
+    const stepNames = ['Cabine SPECIPRO', 'Toit relevable', '4x4', 'Homologation DREAL'];
+    const prep = l => { const L = l.getTotalLength ? l.getTotalLength() : 0; l.style.strokeDasharray = L; l.style.strokeDashoffset = L; return L; };
+    let current = -1;
+    const show = i => {
+      if (current >= 0) { gsap.to(callouts[current], { opacity: 0, duration: 0.35 }); hotTargets[current].forEach(t => t && t.classList.remove('hot')); if (current === 1) { gsap.to(popOpen, { opacity: 0, duration: 0.5 }); gsap.to(popClosed, { opacity: 1, duration: 0.5 }); } }
+      current = i; const c = callouts[i];
+      gsap.fromTo(c, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+      const leader = $('.leader', c); prep(leader); gsap.to(leader, { strokeDashoffset: 0, duration: 0.6, ease: 'power2.out' });
+      hotTargets[i].forEach(t => t && t.classList.add('hot'));
+      if (i === 1) { gsap.to(popOpen, { opacity: 1, duration: 0.7 }); gsap.to(popClosed, { opacity: 0, duration: 0.7 }); }
+      if (stepEl) stepEl.textContent = stepNames[i];
+    };
+    if (reduce || !hasGsap) {
+      plan.classList.add('static'); callouts[0].style.opacity = 1; seats.forEach(s => s.classList.add('hot')); if (stepEl) stepEl.textContent = stepNames[0];
+    } else {
+      lines.forEach(prep); dimLines.forEach(prep); dims.forEach(d => d.style.opacity = 0);
+      const tl = gsap.timeline({ delay: 0.5 });
+      tl.to(lines, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.out', stagger: { each: 0.022, from: 'start' } });
+      seats.forEach((s, i) => tl.call(() => s.classList.add('in'), null, i === 0 ? '-=0.6' : '<+=0.09'));
+      tl.to(dims, { opacity: 1, duration: 0.6 }, '-=0.3');
+      tl.to(dimLines, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.out' }, '<');
+      tl.call(() => { show(0); setInterval(() => show((current + 1) % callouts.length), 4200); });
+      // Parallaxe souris : le plan flotte légèrement, la trame bouge moins
+      const stage = $('.hero--plan');
+      if (stage && !isTouch) {
+        stage.addEventListener('pointermove', e => { const r = stage.getBoundingClientRect(); const nx = ((e.clientX - r.left) / r.width - 0.5) * 2, ny = ((e.clientY - r.top) / r.height - 0.5) * 2; gsap.to(plan, { x: nx * 12, y: ny * 8, rotation: nx * 0.4, duration: 0.9, ease: 'power2.out' }); });
+        stage.addEventListener('pointerleave', () => gsap.to(plan, { x: 0, y: 0, rotation: 0, duration: 1.2, ease: 'power2.out' }));
+      }
+    }
+  }
+
   /* ---------- 3D : section « transformation » ---------- */
   const tCanvas = $('#transform-canvas');
   if (tCanvas && window.AutoN1Van) {
