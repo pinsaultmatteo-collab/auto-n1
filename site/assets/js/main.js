@@ -38,13 +38,15 @@
 
   /* ---------- Compteurs ---------- */
   const fmt = (n, d) => n.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const countTo = (el, dur) => {
+    const end = parseFloat(el.dataset.count), d = parseInt(el.dataset.decimals || '0', 10), suf = el.dataset.suffix || '', t0 = performance.now();
+    el.dataset.done = '';
+    if (reduce) { el.textContent = fmt(end, d) + suf; el.dataset.done = '1'; return; }
+    const step = now => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(end * e, d) + suf; if (p < 1) requestAnimationFrame(step); else el.dataset.done = '1'; };
+    requestAnimationFrame(step);
+  };
   const cio = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return; cio.unobserve(en.target);
-      const el = en.target, end = parseFloat(el.dataset.count), d = parseInt(el.dataset.decimals || '0', 10), suf = el.dataset.suffix || '', dur = 1600, t0 = performance.now();
-      const step = now => { const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(end * e, d) + suf; if (p < 1) requestAnimationFrame(step); };
-      if (reduce) el.textContent = fmt(end, d) + suf; else requestAnimationFrame(step);
-    });
+    entries.forEach(en => { if (!en.isIntersecting) return; cio.unobserve(en.target); countTo(en.target, 1600); });
   }, { threshold: 0.5 });
   $$('[data-count]').forEach(el => cio.observe(el));
 
@@ -79,7 +81,7 @@
     const hotTargets = [seats, [popOpen], $$('.wheel', plan).concat($$('.hub', plan)), [$('.ln.main', plan)]];
     const stepNames = ['Cabine SPECIPRO', 'Toit relevable', '4x4', 'Homologation DREAL'];
     const prep = l => { const L = l.getTotalLength ? l.getTotalLength() : 0; l.style.strokeDasharray = L; l.style.strokeDashoffset = L; return L; };
-    let current = -1;
+    let current = -1, paused = false;
     const show = i => {
       if (current >= 0) { gsap.to(callouts[current], { opacity: 0, duration: 0.35 }); hotTargets[current].forEach(t => t && t.classList.remove('hot')); if (current === 1) { gsap.to(popOpen, { opacity: 0, duration: 0.5 }); gsap.to(popClosed, { opacity: 1, duration: 0.5 }); } }
       current = i; const c = callouts[i];
@@ -98,7 +100,9 @@
       seats.forEach((s, i) => tl.call(() => s.classList.add('in'), null, i === 0 ? '-=0.6' : '<+=0.09'));
       tl.to(dims, { opacity: 1, duration: 0.6 }, '-=0.3');
       tl.to(dimLines, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.out' }, '<');
-      tl.call(() => { show(0); setInterval(() => show((current + 1) % callouts.length), 4200); });
+      const hoverMap = [seats, [popOpen, popClosed], $$('.fill.tire', plan), $$('.fill.glass', plan).concat([$('.ln.ghost', plan)])];
+      hoverMap.forEach((els, i) => els.forEach(el => { if (!el) return; el.classList.add('hov'); el.dataset.cursor = 'Détail'; el.addEventListener('mouseenter', () => { paused = true; if (current !== i) show(i); }); el.addEventListener('mouseleave', () => { paused = false; }); }));
+      tl.call(() => { show(0); setInterval(() => { if (!paused) show((current + 1) % callouts.length); }, 4200); });
       // Parallaxe souris : le plan flotte légèrement, la trame bouge moins
       const stage = $('.hero--plan');
       if (stage && !isTouch) {
@@ -190,6 +194,7 @@
   if (proc) {
     const path = $('.process__line', proc), nodes = $$('.process__node', proc), steps = $$('.pstep');
     const len = path ? path.getTotalLength() : 0; if (path) { path.style.strokeDasharray = len; path.style.strokeDashoffset = len; }
+    steps.forEach((s, i) => { s.addEventListener('mouseenter', () => nodes[i] && nodes[i].classList.add('is-hover')); s.addEventListener('mouseleave', () => nodes[i] && nodes[i].classList.remove('is-hover')); });
     const setProgress = p => { if (path) path.style.strokeDashoffset = len * (1 - p); nodes.forEach((n, i) => n.classList.toggle('is-on', p >= (i + 0.5) / nodes.length)); steps.forEach((s, i) => s.classList.toggle('is-on', p >= (i + 0.5) / steps.length)); };
     if (hasGsap && !reduce) ScrollTrigger.create({ trigger: proc, start: 'top 80%', end: 'bottom 45%', scrub: 0.6, onUpdate: self => setProgress(self.progress) });
     else { const pio = new IntersectionObserver(es => { if (es[0].isIntersecting) { let p = 0; const t = setInterval(() => { p += 0.02; setProgress(Math.min(1, p)); if (p >= 1) clearInterval(t); }, 30); pio.disconnect(); } }, { threshold: 0.3 }); pio.observe(proc); }
@@ -254,6 +259,49 @@
   const ck = $('.cookie');
   if (ck) { try { if (!localStorage.getItem('an1-consent')) setTimeout(() => ck.classList.add('is-visible'), 1800); } catch (e) { }
     $$('[data-consent]', ck).forEach(b => b.addEventListener('click', () => { try { localStorage.setItem('an1-consent', b.dataset.consent); } catch (e) { } ck.classList.remove('is-visible'); })); }
+
+  /* ---------- Vie de la page : projecteur, inclinaison, curseur, chiffres ---------- */
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // Luminance du premier fond opaque trouvé en remontant l'arbre (0 = sombre, 1 = clair)
+  const lum = el => { while (el && el !== document.documentElement) { const bg = getComputedStyle(el).backgroundColor; const m = bg && bg.match(/\d+(\.\d+)?/g); if (m && m.length >= 3 && !(m.length === 4 && parseFloat(m[3]) === 0)) return (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255; el = el.parentElement; } return 0.1; };
+  if (fine && !reduce) {
+    // Étiquettes du curseur sur les cartes cliquables
+    [['.amen__card', 'Découvrir'], ['.vcard', 'Voir'], ['.mega__card', 'Voir']].forEach(([s, l]) => $$(s).forEach(el => { if (!el.dataset.cursor) el.dataset.cursor = l; }));
+    // Projecteur qui suit le pointeur + inclinaison 3D (propriété rotate, lissée en rAF)
+    const SPOT = '.tile--service,.engage__tile,.engage__kf,.amen__card,.pillar,.service,.vcard,.review,.scard,.stat,.persona,.mega__card,.info-card,.access>div,.number,.page-hero__meta>div,.soon,.cta-band,.reassure__item,.pricebox,.map-card,.opt,.hud';
+    const INVERT = '.tile--service,.engage__tile,.pillar,.review,.access>div,.mega__card';
+    const NOTILT = '.cta-band,.soon,.pricebox,.map-card,.engage__kf,.opt,.number,.hud,.info-card';
+    $$(SPOT).forEach(el => {
+      el.classList.add('spot');
+      if (!el.matches(INVERT) && lum(el) > 0.5) el.classList.add('spot--light');
+      const canTilt = !el.matches(NOTILT); if (canTilt) el.classList.add('tilt');
+      const amp = parseFloat(el.dataset.tilt || '0') || (el.offsetWidth > 700 ? 2 : 4);
+      let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+      const tick = () => { cx += (tx - cx) * 0.14; cy += (ty - cy) * 0.14; const ang = Math.hypot(cx, cy); if (ang > 0.02) { el.style.setProperty('--ax', (cy / ang).toFixed(3)); el.style.setProperty('--ay', (cx / ang).toFixed(3)); } el.style.setProperty('--ang', ang.toFixed(2) + 'deg'); raf = (Math.abs(tx - cx) > 0.02 || Math.abs(ty - cy) > 0.02) ? requestAnimationFrame(tick) : 0; };
+      const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+      el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height; el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%'); if (canTilt) { tx = (px - 0.5) * 2 * amp; ty = (0.5 - py) * 2 * amp; kick(); } });
+      el.addEventListener('pointerleave', () => { tx = 0; ty = 0; kick(); });
+    });
+    // Curseur : losange rouge immédiat + repère qui suit avec inertie et épouse les éléments interactifs
+    const cur = document.createElement('div'); cur.className = 'cursor is-hidden'; cur.setAttribute('aria-hidden', 'true');
+    cur.innerHTML = '<i class="cursor__dot"></i><i class="cursor__ring"><span class="cursor__label"></span></i>';
+    document.body.appendChild(cur); document.documentElement.classList.add('has-cursor');
+    const dot = cur.children[0], ring = cur.children[1], label = ring.firstChild;
+    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y, shown = false, moving = 0;
+    const follow = () => { rx += (x - rx) * 0.18; ry += (y - ry) * 0.18; ring.style.translate = rx.toFixed(1) + 'px ' + ry.toFixed(1) + 'px'; moving = (Math.abs(x - rx) > 0.1 || Math.abs(y - ry) > 0.1) ? requestAnimationFrame(follow) : 0; };
+    window.addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (!shown) { shown = true; rx = x; ry = y; cur.classList.remove('is-hidden'); } dot.style.translate = x + 'px ' + y + 'px'; if (!moving) moving = requestAnimationFrame(follow); }, { passive: true });
+    const LINK = 'a,button,[role=button],label,summary,.hotspot,.swatch,.ttab,.chip,.opt,.hov,.callout';
+    document.addEventListener('pointerover', e => {
+      const t = e.target; if (!(t instanceof Element)) return;
+      const view = t.closest('[data-cursor]'), link = t.closest(LINK), field = t.closest('input,textarea,select,iframe,[contenteditable]');
+      if (view) label.textContent = view.dataset.cursor;
+      cur.classList.toggle('is-view', !!view); cur.classList.toggle('is-link', !!link && !view); cur.classList.toggle('is-hidden', !!field); cur.classList.toggle('on-light', lum(t) > 0.5);
+    });
+    document.addEventListener('pointerdown', () => cur.classList.add('is-down')); document.addEventListener('pointerup', () => cur.classList.remove('is-down'));
+    document.addEventListener('mouseleave', () => cur.classList.add('is-hidden')); document.addEventListener('mouseenter', () => { if (shown) cur.classList.remove('is-hidden'); });
+    // Les chiffres clés se recomptent au survol
+    $$('.stat,.engage__kf,.number,.rating,.kpi,.page-hero__meta>div,.hud').forEach(box => box.addEventListener('mouseenter', () => $$('[data-count]', box).forEach(c => { if (c.dataset.done) countTo(c, 900); })));
+  }
 
   /* ---------- Année footer ---------- */
   $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
