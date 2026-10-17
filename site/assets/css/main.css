@@ -738,3 +738,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
   .hero__plate::before{display:none}
   .hero--stage .hero__title{font-size:clamp(34px,9.6vw,46px)}
 }
+
+/* ---------- Nos aménagements : quatre tuiles lisibles sans survol ---------- */
+.amen{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:var(--joint);padding:3px}
+.amen__card{display:flex;flex-direction:column;background:var(--graphite);color:#fff;container-type:inline-size;transition:background .3s}
+.amen__card:hover{background:#454a53}
+.amen__media{--cut:clamp(24px,12.5cqi,56px);position:relative;aspect-ratio:4/3;overflow:hidden;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,0 100%)}
+.amen__media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.amen__card:hover .amen__media img{transform:scale(1.04)}
+.amen__media .tag{position:absolute;top:14px;left:14px}
+.amen__body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.amen__head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.amen__head .eyebrow{color:var(--beton);font-size:11.5px}
+.amen__head .ico{flex:0 0 36px;width:36px;height:36px}
+.amen__body h3{font-size:clamp(21px,1.7vw,25px);font-weight:800;font-stretch:85%;font-variation-settings:"wdth" 85;line-height:1.05}
+.amen__body p{color:var(--beton);font-size:15px}
+.amen__body .tags{display:flex;gap:6px;flex-wrap:wrap}
+.amen__body .link{margin-top:auto;padding-top:6px;font-size:14.5px}
+@media (max-width:1180px){.amen{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.amen{grid-template-columns:1fr}.amen__media{aspect-ratio:16/9}}
