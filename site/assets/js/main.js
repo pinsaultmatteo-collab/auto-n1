@@ -69,17 +69,23 @@
     b.addEventListener('mouseleave', () => { b.style.transform = ''; });
   });
 
-  /* ---------- 3D : hero ---------- */
+  /* ---------- 3D : hero (scène d'assemblage) ---------- */
   const heroCanvas = $('#hero-canvas');
   let heroVan = null;
   if (heroCanvas && window.AutoN1Van) {
-    heroVan = AutoN1Van.create(heroCanvas, { preset: 'hero', color: '#3B4048', mouseArea: $('.hero') });
+    heroVan = AutoN1Van.create(heroCanvas, { preset: 'hero', color: '#4a4f58', mouseArea: $('.hero'), explode: 1, intro: 1, xray: 1, seats: 7, cargo: 0 });
     if (!heroVan) document.body.classList.add('no-webgl');
     else {
-      // Petite chorégraphie d'accueil : la vue technique se dissipe et révèle la carrosserie
-      heroVan.state.xray = 1; heroVan.state.seats = 7;
-      setTimeout(() => { heroVan.set({ xray: 0 }, 2.2); }, 900);
-      setTimeout(() => { heroVan.set({ seats: 2, cargo: 0 }, 1.4); }, 3400);
+      const steps = $$('.hero__steps span');
+      const mark = i => steps.forEach((s, j) => s.classList.toggle('is-on', j === i));
+      // 1. vue éclatée en plan technique → 2. les pièces s'assemblent, la caméra descend → 3. la carrosserie se matérialise, cabine SPECIPRO en place
+      const t0 = reduce ? 0 : 600;
+      setTimeout(() => { heroVan.set({ explode: 0, intro: 0 }, reduce ? 0 : 2.8, 'power3.inOut'); mark(1); }, t0);
+      setTimeout(() => { heroVan.set({ xray: 0 }, reduce ? 0 : 1.6); mark(2); }, t0 + 2300);
+      setTimeout(() => { heroVan.set({ seats: 5 }, 1.2); }, t0 + 4600);
+      // Parallaxe douce de la scène au défilement
+      const stage = $('.hero--stage'), wrap = $('.hero--stage .hero__canvas');
+      if (stage && wrap && !reduce) window.addEventListener('scroll', () => { const y = Math.min(window.scrollY, stage.offsetHeight); wrap.style.transform = `translateY(${y * 0.22}px)`; }, { passive: true });
     }
   }
 

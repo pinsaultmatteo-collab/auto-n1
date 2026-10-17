@@ -68,7 +68,7 @@ window.AutoN1Van = (function () {
 
   /* ---------- Presets caméra ---------- */
   const PRESETS = {
-    hero:    { pos: [8.2, 2.3, 7.0],  look: [0, 0.95, 0], yaw: -0.15, shift: 0, auto: 0.10 },
+    hero:    { pos: [12.6, 3.1, 10.6], look: [0, 0.8, 0], yaw: -0.2, shift: 2.7, auto: 0.10 },
     cargo:   { pos: [-6.2, 2.6, 6.2], look: [-0.4, 0.9, 0], yaw: 0.0, shift: 0, auto: 0 },
     seats:   { pos: [1.2, 3.6, 7.8],  look: [-0.4, 0.9, 0], yaw: 0.0, shift: 0, auto: 0 },
     poptop:  { pos: [6.8, 1.5, 6.4],  look: [0, 1.35, 0],   yaw: 0.0, shift: 0, auto: 0 },
@@ -86,7 +86,7 @@ window.AutoN1Van = (function () {
     } catch (e) { canvas.classList.add('is-hidden'); return null; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, opts.maxDpr || 2));
     renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.25;
-    renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
+    renderer.shadowMap.enabled = false;
 
     const scene = new T.Scene();
     scene.fog = new T.FogExp2(0x17191c, 0.042);
@@ -96,7 +96,7 @@ window.AutoN1Van = (function () {
 
     // Lumières
     scene.add(new T.HemisphereLight(0xdfe6ff, 0x1a1a1f, 0.9));
-    const key = new T.DirectionalLight(0xfff1e4, 3.2); key.position.set(6, 9, 4); key.castShadow = true;
+    const key = new T.DirectionalLight(0xfff1e4, 3.2); key.position.set(6, 9, 4); key.castShadow = false;
     key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 1; key.shadow.camera.far = 30;
     key.shadow.camera.left = key.shadow.camera.bottom = -6; key.shadow.camera.right = key.shadow.camera.top = 6; key.shadow.bias = -0.0008; key.shadow.radius = 4;
     scene.add(key);
@@ -104,9 +104,53 @@ window.AutoN1Van = (function () {
     const rim = new T.PointLight(0xffffff, 18, 18, 1.4); rim.position.set(-4.5, 1.6, -4.2); scene.add(rim);
 
     // Sol + grille technique + ombre de contact
-    const floor = new T.Mesh(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: 0x17191c, roughness: 0.32, metalness: 0.6 }));
-    floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
-    const grid = new T.GridHelper(40, 80, 0x3b4048, 0x2a2e34); grid.position.y = 0.003; grid.material.transparent = true; grid.material.opacity = 0.42; scene.add(grid);
+    // Sol : miroir rendu dans une texture (caméra virtuelle réfléchie) + trame isométrique de la charte dessinée dans le shader
+    const mirrorRT = new T.WebGLRenderTarget(512, 512, { type: T.HalfFloatType });
+    const floorMat = new T.ShaderMaterial({
+      uniforms: { tDiffuse: { value: mirrorRT.texture }, textureMatrix: { value: new T.Matrix4() }, color: { value: new T.Color(0x17191c) }, lineColor: { value: new T.Color(0x3b4048) }, strength: { value: 0.42 }, gridOpacity: { value: 0.75 } },
+      vertexShader: `uniform mat4 textureMatrix; varying vec4 vUv; varying vec3 vWorld;
+        void main(){ vUv = textureMatrix * vec4(position, 1.0); vWorld = (modelMatrix * vec4(position, 1.0)).xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `uniform sampler2D tDiffuse; uniform vec3 color; uniform vec3 lineColor; uniform float strength; uniform float gridOpacity; varying vec4 vUv; varying vec3 vWorld;
+        float gridLine(float v, float spacing){ float f = abs(fract(v / spacing - 0.5) - 0.5) * spacing; float w = fwidth(v) * 1.1; return 1.0 - smoothstep(0.0, w + 0.012, f); }
+        void main(){
+          vec4 refl = texture2DProj(tDiffuse, vUv);
+          float dist = length(vWorld.xz);
+          float fade = 1.0 - smoothstep(3.5, 13.0, dist);
+          float u = vWorld.x * 0.8660254 + vWorld.z * 0.5; float v = vWorld.x * 0.8660254 - vWorld.z * 0.5;
+          float g = max(gridLine(u, 0.95), gridLine(v, 0.95));
+          vec3 base = mix(color, lineColor, g * gridOpacity * fade);
+          vec3 col = mix(base, base + refl.rgb, strength * fade);
+          gl_FragColor = vec4(col, 1.0);
+        }`
+    });
+    const floor = new T.Mesh(new T.CircleGeometry(18, 72), floorMat);
+    floor.rotation.x = -Math.PI / 2; scene.add(floor);
+    const grid = { material: { opacity: 0 } }; // compat : la trame est désormais dans le shader du sol
+    // Caméra virtuelle du miroir (principe du Reflector de Three.js)
+    const mirror = { plane: new T.Plane(), normal: new T.Vector3(), pos: new T.Vector3(), camPos: new T.Vector3(), rot: new T.Matrix4(), look: new T.Vector3(), view: new T.Vector3(), target: new T.Vector3(), q: new T.Vector4(), clip: new T.Vector4(), cam: new T.PerspectiveCamera() };
+    function renderMirror() {
+      const m = mirror;
+      m.pos.setFromMatrixPosition(floor.matrixWorld); m.camPos.setFromMatrixPosition(camera.matrixWorld);
+      m.rot.extractRotation(floor.matrixWorld); m.normal.set(0, 0, 1).applyMatrix4(m.rot);
+      m.view.subVectors(m.pos, m.camPos); if (m.view.dot(m.normal) > 0) return;
+      m.view.reflect(m.normal).negate().add(m.pos);
+      m.rot.extractRotation(camera.matrixWorld);
+      m.look.set(0, 0, -1).applyMatrix4(m.rot).add(m.camPos);
+      m.target.subVectors(m.pos, m.look).reflect(m.normal).negate().add(m.pos);
+      m.cam.position.copy(m.view); m.cam.up.set(0, 1, 0).applyMatrix4(m.rot).reflect(m.normal); m.cam.lookAt(m.target);
+      m.cam.far = camera.far; m.cam.updateMatrixWorld(); m.cam.projectionMatrix.copy(camera.projectionMatrix);
+      floorMat.uniforms.textureMatrix.value.set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1)
+        .multiply(m.cam.projectionMatrix).multiply(m.cam.matrixWorldInverse).multiply(floor.matrixWorld);
+      m.plane.setFromNormalAndCoplanarPoint(m.normal, m.pos).applyMatrix4(m.cam.matrixWorldInverse);
+      m.clip.set(m.plane.normal.x, m.plane.normal.y, m.plane.normal.z, m.plane.constant);
+      const pm = m.cam.projectionMatrix;
+      m.q.x = (Math.sign(m.clip.x) + pm.elements[8]) / pm.elements[0]; m.q.y = (Math.sign(m.clip.y) + pm.elements[9]) / pm.elements[5]; m.q.z = -1; m.q.w = (1 + pm.elements[10]) / pm.elements[14];
+      m.clip.multiplyScalar(2 / m.clip.dot(m.q));
+      pm.elements[2] = m.clip.x; pm.elements[6] = m.clip.y; pm.elements[10] = m.clip.z + 1 - 0.0001; pm.elements[14] = m.clip.w;
+      floor.visible = false; contact.visible = false;
+      const rt = renderer.getRenderTarget(); renderer.setRenderTarget(mirrorRT); renderer.clear(); renderer.render(scene, m.cam); renderer.setRenderTarget(rt);
+      floor.visible = true; contact.visible = true;
+    }
     const contact = new T.Mesh(new T.PlaneGeometry(6.4, 3.4), new T.MeshBasicMaterial({ map: shadowTexture(), transparent: true, opacity: 0.55, depthWrite: false }));
     contact.rotation.x = -Math.PI / 2; contact.position.y = 0.006; scene.add(contact);
 
@@ -236,7 +280,7 @@ window.AutoN1Van = (function () {
     const bed = new T.Mesh(new T.BoxGeometry(1.9, 0.08, 1.3), new T.MeshStandardMaterial({ color: 0xc9c6bb, roughness: 1 })); bed.position.set(-1.1, 2.0, 0); bed.userData = { k: 0 }; bed.scale.setScalar(0.001); van.add(bed);
 
     /* ---------- État ---------- */
-    const state = { seats: opts.seats || 2, popTop: opts.popTop || 0, xray: opts.xray || 0, tilt: opts.tilt || 0, cargo: opts.cargo == null ? 1 : opts.cargo, yaw: 0 };
+    const state = { seats: opts.seats || 2, popTop: opts.popTop || 0, xray: opts.xray || 0, tilt: opts.tilt || 0, cargo: opts.cargo == null ? 1 : opts.cargo, yaw: 0, explode: opts.explode || 0, intro: opts.intro || 0 };
     let preset = PRESETS[opts.preset || 'hero'];
     const targetColor = bodyColor.clone();
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
@@ -248,10 +292,10 @@ window.AutoN1Van = (function () {
 
     function applyPreset(p) {
       preset = PRESETS[p] || preset;
-      const scaleDist = camera.aspect < 0.8 ? 1.5 : (camera.aspect < 1.1 ? 1.25 : (camera.aspect < 1.4 ? 1.1 : 1));
+      const scaleDist = camera.aspect < 0.8 ? 1.2 : (camera.aspect < 1.1 ? 1.05 : (camera.aspect < 1.4 ? 1.1 : 1));
       wantPos.fromArray(preset.pos).multiplyScalar(scaleDist);
       wantLook.fromArray(preset.look);
-      const shift = camera.aspect < 0.95 ? 0 : preset.shift;
+      const shift = camera.aspect < 0.95 ? 0 : (camera.aspect < 1.3 ? preset.shift * 0.5 : preset.shift);
       if (shift) {
         const dir = new T.Vector3().subVectors(wantLook, wantPos).normalize();
         const right = new T.Vector3().crossVectors(dir, new T.Vector3(0, 1, 0)).normalize();
@@ -262,6 +306,7 @@ window.AutoN1Van = (function () {
       const w = canvas.clientWidth || canvas.parentElement.clientWidth || 800;
       const h = canvas.clientHeight || canvas.parentElement.clientHeight || 600;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      mirrorRT.setSize(Math.max(256, Math.round(w * 0.6)), Math.max(256, Math.round(h * 0.6)));
       applyPreset(Object.keys(PRESETS).find(k => PRESETS[k] === preset) || 'hero');
     }
     const lerp = (a, b, t) => a + (b - a) * t;
@@ -274,7 +319,7 @@ window.AutoN1Van = (function () {
       mouse.x = lerp(mouse.x, mouse.tx, k * 0.6); mouse.y = lerp(mouse.y, mouse.ty, k * 0.6);
       // Caméra
       camPos.lerp(wantPos, k * 0.55); camLook.lerp(wantLook, k * 0.55);
-      camera.position.copy(camPos); camera.position.y += mouse.y * 0.25;
+      camera.position.copy(camPos).multiplyScalar(1 + 0.6 * state.intro); camera.position.y += mouse.y * 0.25 + 2.2 * state.intro;
       camera.lookAt(camLook);
       // Rotation véhicule
       autoAngle = preset.auto ? Math.sin(clock.t * preset.auto * 3.2) * 0.32 : 0; // balancement lent au lieu d'une rotation complète
@@ -283,6 +328,12 @@ window.AutoN1Van = (function () {
       van.rotation.z = lerp(van.rotation.z, state.tilt * 0.07 + Math.sin(clock.t * 1.3) * 0.006 * state.tilt, k);
       van.rotation.x = lerp(van.rotation.x, state.tilt * 0.085, k);
       van.position.y = lerp(van.position.y, state.tilt * 0.09, k);
+      // Vue éclatée : les pièces s'écartent puis s'assemblent (roues, toit, sièges)
+      const ex = state.explode, exE = ex * ex * (3 - 2 * ex);
+      wheels.forEach((w, i) => { const z0 = i % 2 === 0 ? 0.9 : -0.9, x0 = i < 2 ? 1.62 : -1.62; w.position.set(x0 + (i < 2 ? 0.6 : -0.6) * exE, 0.37 - 0.42 * exE, z0 + Math.sign(z0) * 1.3 * exE); w.rotation.x = exE * 0.9 * (i % 2 ? 1 : -1); });
+      hinge.position.y = 2.1 + 1.7 * exE; hinge.position.x = -2.2 - 0.4 * exE;
+      seats.forEach((s, i) => { const d = seatDefs[i]; s.position.set(d.x + (i % 2 ? 0.25 : -0.25) * exE, FLOOR_Y + (1.1 + 0.25 * i) * exE, d.z + Math.sign(d.z || 1) * 0.5 * exE); s.rotation.y = exE * 0.6 * (i % 2 ? 1 : -1); });
+      table.position.y = FLOOR_Y + 1.6 * exE;
       // Toit relevable
       const a = 0.44 * state.popTop; hinge.rotation.z = a;
       bellows.scale.set(Math.cos(a), Math.max(0.001, 2.45 * Math.sin(a)), 1);
@@ -292,7 +343,7 @@ window.AutoN1Van = (function () {
       shell.forEach(m => { m.opacity = op; m.transparent = op < 0.995; m.depthWrite = op > 0.5; });
       glassMats.forEach(m => { m.opacity = 0.94 - 0.85 * state.xray; m.depthWrite = false; });
       edges.material.opacity = 0.42 * state.xray;
-      grid.material.opacity = 0.42 + 0.3 * state.xray;
+      floorMat.uniforms.gridOpacity.value = 0.75 + 0.5 * state.xray;
       // Sièges / table / cloison / chargement
       const cargoOn = state.seats <= 2 ? state.cargo : 0;
       seats.forEach(s => { const want = state.seats >= s.userData.min ? 1 : 0; s.userData.k = lerp(s.userData.k, want, k * 0.8); const sc = Math.max(0.001, s.userData.k); s.scale.set(sc, sc, sc); });
@@ -302,6 +353,8 @@ window.AutoN1Van = (function () {
       const bw = state.popTop > 0.5 ? 1 : 0; bed.userData.k = lerp(bed.userData.k, bw, k * 0.8); bed.scale.setScalar(Math.max(0.001, bed.userData.k));
       // Couleur
       paint.color.lerp(targetColor, k * 0.6);
+      camera.updateMatrixWorld();
+      renderMirror();
       renderer.render(scene, camera);
       if (running && visible) raf = requestAnimationFrame(frame);
     }
@@ -327,10 +380,11 @@ window.AutoN1Van = (function () {
     const api = {
       state, scene, camera, renderer, van,
       start, stop, resize,
+      tick() { frame(performance.now()); },
       setPreset(name) { applyPreset(name); },
       setColor(hex) { targetColor.set(hex); },
-      set(partial, duration) {
-        if (window.gsap) { window.gsap.to(state, Object.assign({ duration: duration == null ? 1.1 : duration, ease: 'power2.inOut', overwrite: 'auto' }, partial)); }
+      set(partial, duration, ease) {
+        if (window.gsap) { window.gsap.to(state, Object.assign({ duration: duration == null ? 1.1 : duration, ease: ease || 'power2.inOut', overwrite: 'auto' }, partial)); }
         else Object.assign(state, partial);
       },
       apply(name) { // états métier prêts à l'emploi

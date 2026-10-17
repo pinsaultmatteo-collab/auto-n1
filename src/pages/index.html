@@ -11,10 +11,10 @@ ogimg: transit-sport-gris-sieges.jpg
 <div class="preloader" aria-hidden="true"><div class="preloader__inner"><img class="preloader__mark" src="assets/brand/logo-bloc-reduit_negatif.svg" alt="" width="81" height="91"><div class="preloader__bar"><i></i></div><span class="preloader__txt">Fourgons aménagés sur mesure</span></div></div>
 
 <!-- ===================== HERO ===================== -->
-<section class="hero" id="top">
-  <div class="hero__panel">
-    <div class="trame"></div>
-    <div class="hero__content">
+<section class="hero hero--stage" id="top" aria-label="Fourgon aménagé en 3D">
+  <div class="hero__canvas"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
+  <div class="container hero__grid">
+    <div class="hero__plate">
       <span class="eyebrow">Wimereux · Côte d'Opale</span>
       <h1 class="hero__title h1">
         <span class="line"><span>Votre fourgon,</span></span>
@@ -27,11 +27,17 @@ ogimg: transit-sport-gris-sieges.jpg
         <a class="btn btn--ghost" href="#amenagements"><span>Voir les aménagements</span></a>
       </div>
     </div>
+    <aside class="hero__spec" aria-label="Fiche technique">
+      <div><span>Base</span><b>Transit Custom L2H1</b></div>
+      <div><span>Places</span><b>2 → 7</b></div>
+      <div><span>Transformation</span><b>3 min</b></div>
+      <div><span>Homologation</span><b>CTTE</b></div>
+    </aside>
   </div>
-  <div class="hero__visual">
-    <canvas id="hero-canvas" aria-label="Fourgon aménagé en 3D interactif"></canvas>
-    <span class="hero__cap">Cabine approfondie · de 2 à 7 places</span>
+  <div class="hero__steps" aria-hidden="true">
+    <span data-step="0" class="is-on">Vue éclatée</span><span data-step="1">Assemblage</span><span data-step="2">Cabine SPECIPRO</span>
   </div>
+  <span class="hero__cap">Aperçu 3D · Ford Transit Custom · cabine approfondie</span>
 </section>
 <div class="hero__services" aria-label="Nos services">
   <a class="tile tile--service" href="#accompagnement"><svg class="ico"><use href="#ico-sourcing"/></svg><b>Sourcing</b></a>
