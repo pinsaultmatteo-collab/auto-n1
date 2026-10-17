@@ -889,3 +889,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .hero--plan .trame{display:none}
 @media (prefers-reduced-motion:reduce){.hero__bg img,.flt,.flt svg,.hero__plan{animation:none}}
 @media (max-width:1000px){.hero__shade{background:linear-gradient(180deg,rgba(23,25,28,.9) 0%,rgba(23,25,28,.72) 35%,rgba(23,25,28,.96) 60%,rgba(23,25,28,1) 100%)}.flt{display:none}.flt:nth-child(-n+5){display:block}}
+
+/* ---------- Ambiance : halo lumineux diffus, faisceau, cercles rouges qui pulsent ---------- */
+.ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.has-ambient>.container{position:relative;z-index:1}
+.hero--plan .ambient{z-index:1}
+.ambient__glow{position:absolute;left:-12%;top:-24%;width:56vmax;height:56vmax;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.17) 0%,rgba(255,255,255,.07) 28%,transparent 62%);filter:blur(36px);mix-blend-mode:screen;animation:glowdrift 28s ease-in-out infinite alternate;will-change:transform}
+.ambient__glow--2{left:46%;top:28%;width:42vmax;height:42vmax;background:radial-gradient(circle,rgba(200,16,46,.16) 0%,rgba(200,16,46,.06) 32%,transparent 62%);animation-duration:36s;animation-direction:alternate-reverse}
+@keyframes glowdrift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(42vw,16vh,0) scale(1.14)}100%{transform:translate3d(66vw,-12vh,0) scale(.94)}}
+.ambient__beam{position:absolute;top:-25%;left:-35%;width:22%;height:150%;background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.05) 40%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.05) 60%,transparent 100%);transform:skewX(-16deg);filter:blur(6px);mix-blend-mode:screen;animation:beam 16s ease-in-out infinite}
+@keyframes beam{0%{transform:translateX(0) skewX(-16deg);opacity:0}12%{opacity:1}55%{opacity:1}70%{transform:translateX(640%) skewX(-16deg);opacity:0}100%{transform:translateX(640%) skewX(-16deg);opacity:0}}
+.ambient__ring{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--rouge);opacity:var(--o,.7);animation:ringpulse var(--d,3.4s) ease-out infinite,ringdrift var(--f,16s) ease-in-out infinite alternate;animation-delay:var(--delay,0s),var(--delay,0s);will-change:transform}
+@keyframes ringpulse{0%{box-shadow:0 0 0 0 rgba(200,16,46,.55)}75%{box-shadow:0 0 0 22px rgba(200,16,46,0)}100%{box-shadow:0 0 0 0 rgba(200,16,46,0)}}
+@keyframes ringdrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--dx,20px),var(--dy,-30px),0)}}
+.transform__visual .ambient{z-index:0}
+.transform__visual .plan-stage{z-index:1}
+@media (max-width:1000px){.ambient__ring:nth-child(n+8){display:none}.ambient__beam{display:none}}
+@media (prefers-reduced-motion:reduce){.ambient__glow,.ambient__beam,.ambient__ring{animation:none}}
