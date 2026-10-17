@@ -131,7 +131,9 @@
     const states = { cargo: { seats: 2, wall: true, cargo: true }, seats: { seats: 7, table: true }, poptop: { seats: 5, pop: true, table: true }, offroad: { seats: 5, offroad: true } };
     const steps = $$('.step'), tabs = $$('.ttab'), tabsWrap = $('.transform__tabs'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
     const mqMobile = window.matchMedia('(max-width: 1000px)');
-    let current = 0, triggers = [], stepIo = null, timer = null;
+    let current = 0, triggers = [], stepIo = null, timer = null, pinST = null;
+    const tCount = $('#t-count'), tBar = $('#t-bar'), tNext = $('#t-next'), navBtns = $$('.tnav__btn'), pad = n => String(n).padStart(2, '0');
+    const fillTabs = p => tabs.forEach((t, j) => t.style.setProperty('--fill', Math.max(0, Math.min(1, p * (steps.length - 1) - j + 1)).toFixed(3)));
     const activate = i => {
       current = i;
       steps.forEach((s, j) => s.classList.toggle('is-active', j === i));
@@ -142,17 +144,38 @@
       if (hudPlaces) hudPlaces.innerHTML = s.dataset.places || '';
       if (hudMode) hudMode.textContent = s.dataset.mode || '';
       if (hudTime) hudTime.textContent = s.dataset.time || '';
+      if (tCount) tCount.textContent = pad(i + 1);
+      if (tBar) tBar.style.transform = `scaleX(${(i + 1) / steps.length})`;
+      navBtns.forEach(b => { b.disabled = (b.dataset.dir === '-1' && i === 0) || (b.dataset.dir === '1' && i === steps.length - 1); });
+      if (tNext) {
+        const nx = steps[i + 1], last = !nx;
+        tNext.classList.toggle('is-last', last);
+        tNext.querySelector('small').textContent = last ? 'Et ensuite' : 'À suivre';
+        tNext.querySelector('span').textContent = last ? 'Configurer le vôtre' : `${nx.dataset.day} · ${(tabs[i + 1] && $('small', tabs[i + 1]) ? $('small', tabs[i + 1]).textContent : nx.dataset.mode)}`;
+      }
     };
+    // Bureau : la section est épinglée, le défilement fait passer les quatre moments sans vide entre eux
     const setupDesktop = () => {
-      if (hasGsap) triggers = steps.map((s, i) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 45%', onEnter: () => activate(i), onEnterBack: () => activate(i) }));
-      else { stepIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) activate(steps.indexOf(e.target)); }), { threshold: 0.5 }); steps.forEach(s => stepIo.observe(s)); }
-      activate(0);
+      activate(0); fillTabs(0);
+      if (!hasGsap) return;
+      const n = steps.length, wrap = $('.transform__wrap');
+      pinST = ScrollTrigger.create({
+        trigger: wrap, pin: true, anticipatePin: 1,
+        start: () => 'top ' + (nav ? nav.offsetHeight : 0) + 'px',
+        end: () => '+=' + Math.round(window.innerHeight * 0.8 * (n - 1)),
+        snap: reduce ? false : { snapTo: 1 / (n - 1), duration: { min: 0.25, max: 0.6 }, delay: 0.08, ease: 'power2.inOut' },
+        onUpdate: self => { fillTabs(self.progress); const i = Math.round(self.progress * (n - 1)); if (i !== current) activate(i); }
+      });
+      triggers = [pinST];
     };
-    const teardownDesktop = () => { triggers.forEach(t => t.kill()); triggers = []; if (stepIo) { stepIo.disconnect(); stepIo = null; } };
+    const teardownDesktop = () => { triggers.forEach(t => t.kill(true)); triggers = []; pinST = null; tabs.forEach(t => t.style.removeProperty('--fill')); if (stepIo) { stepIo.disconnect(); stepIo = null; } };
+    const goTo = i => { i = Math.max(0, Math.min(steps.length - 1, i)); if (pinST) window.scrollTo({ top: pinST.start + (pinST.end - pinST.start) * i / (steps.length - 1), behavior: reduce ? 'auto' : 'smooth' }); else { activate(i); fillTabs(i / (steps.length - 1)); } };
     const stopAuto = () => { if (timer) clearInterval(timer); timer = null; };
     const startAuto = () => { stopAuto(); if (reduce) return; tabsWrap && tabsWrap.classList.remove('is-paused'); timer = setInterval(() => activate((current + 1) % steps.length), 5000); };
-    const userPick = i => { stopAuto(); tabsWrap && tabsWrap.classList.add('is-paused'); activate((i + steps.length) % steps.length); };
+    const userPick = i => { if (!mqMobile.matches) { goTo(i); return; } stopAuto(); tabsWrap && tabsWrap.classList.add('is-paused'); activate((i + steps.length) % steps.length); };
     tabs.forEach((t, i) => t.addEventListener('click', () => userPick(i)));
+    navBtns.forEach(b => b.addEventListener('click', () => userPick(current + parseInt(b.dataset.dir, 10))));
+    if (tNext) tNext.addEventListener('click', e => { if (current < steps.length - 1) { e.preventDefault(); userPick(current + 1); } });
     const swipeArea = $('.transform__visual'); let x0 = null;
     if (swipeArea) {
       swipeArea.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
