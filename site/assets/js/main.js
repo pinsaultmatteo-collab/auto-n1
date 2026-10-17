@@ -34,7 +34,14 @@
 
   /* ---------- Révélations au scroll ---------- */
   const io = new IntersectionObserver(entries => { entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in-view'); io.unobserve(en.target); } }); }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
-  $$('.reveal,.split-lines,.img-reveal,.draw,.pillar,[data-inview]').forEach(el => io.observe(el));
+  $$('.reveal,.split-lines,.draw,.pillar,[data-inview]').forEach(el => io.observe(el));
+
+  /* ---------- Images dévoilées : chargées en avance, révélées seulement une fois décodées ---------- */
+  const decoded = img => (img.decode ? img.decode().catch(() => { }) : Promise.resolve());
+  const imgReady = img => (img.complete && img.naturalWidth) ? decoded(img) : new Promise(r => { img.addEventListener('load', () => decoded(img).then(r), { once: true }); img.addEventListener('error', r, { once: true }); });
+  const imgEarly = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { $$('img', e.target).forEach(i => { i.loading = 'eager'; }); imgEarly.unobserve(e.target); } }), { rootMargin: '1600px 0px' });
+  const imgIo = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; imgIo.unobserve(e.target); Promise.all($$('img', e.target).map(imgReady)).then(() => e.target.classList.add('in-view')); }), { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+  $$('.img-reveal').forEach(el => { imgEarly.observe(el); imgIo.observe(el); });
 
   /* ---------- Compteurs ---------- */
   const fmt = (n, d) => n.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -219,7 +226,7 @@
     const len = path ? path.getTotalLength() : 0; if (path) { path.style.strokeDasharray = len; path.style.strokeDashoffset = len; }
     steps.forEach((s, i) => { s.addEventListener('mouseenter', () => nodes[i] && nodes[i].classList.add('is-hover')); s.addEventListener('mouseleave', () => nodes[i] && nodes[i].classList.remove('is-hover')); });
     const setProgress = p => { if (path) path.style.strokeDashoffset = len * (1 - p); nodes.forEach((n, i) => n.classList.toggle('is-on', p >= (i + 0.5) / nodes.length)); steps.forEach((s, i) => s.classList.toggle('is-on', p >= (i + 0.5) / steps.length)); };
-    if (hasGsap && !reduce) ScrollTrigger.create({ trigger: proc, start: 'top 80%', end: 'bottom 45%', scrub: 0.6, onUpdate: self => setProgress(self.progress) });
+    if (hasGsap && !reduce) ScrollTrigger.create({ trigger: proc, start: 'top 92%', end: 'top 10%', scrub: 1.2, onUpdate: self => setProgress(self.progress) });
     else { const pio = new IntersectionObserver(es => { if (es[0].isIntersecting) { let p = 0; const t = setInterval(() => { p += 0.02; setProgress(Math.min(1, p)); if (p >= 1) clearInterval(t); }, 30); pio.disconnect(); } }, { threshold: 0.3 }); pio.observe(proc); }
   }
 

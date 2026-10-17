@@ -1185,3 +1185,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 @keyframes stepin{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 @keyframes stepli{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.step.is-active>*,.step.is-active li{animation:none}}
+
+/* Portrait : pas de cadre vide avant l'image, dévoilement avec léger recul */
+.img-reveal:not(.in-view){background:transparent}
+.img-reveal>img{transform:scale(1.1);transition:clip-path 1s var(--ease-io),transform 1.6s var(--ease)}
+.img-reveal.in-view>img{transform:none}
+@media (prefers-reduced-motion:reduce){.img-reveal>*{clip-path:none!important;transform:none!important}}
