@@ -26,7 +26,7 @@ window.AutoN1Van = (function () {
     panel(0, 4.5, -11.5, 12, 4, .2, 2.5);
     panel(0, 4.5, 11.5, 12, 4, .2, 2);
     panel(-7, 1.2, 7, 4, .3, 4, 5, 0xffe3cf); // bandeau chaud bas
-    panel(7, 3, -7, 2, 6, .2, 4, 0xff2a3a);   // panneau rouge (accent marque)
+    panel(7, 3, -7, 2, 6, .2, 2.5, 0xffffff);  // panneau latéral neutre
     const pmrem = new T.PMREMGenerator(renderer);
     const tex = pmrem.fromScene(scene, 0.04).texture;
     pmrem.dispose();
@@ -68,7 +68,7 @@ window.AutoN1Van = (function () {
 
   /* ---------- Presets caméra ---------- */
   const PRESETS = {
-    hero:    { pos: [9.6, 2.5, 7.8],  look: [0, 0.9, 0],  yaw: -0.15, shift: 1.4, auto: 0.10 },
+    hero:    { pos: [8.2, 2.3, 7.0],  look: [0, 0.95, 0], yaw: -0.15, shift: 0, auto: 0.10 },
     cargo:   { pos: [-6.2, 2.6, 6.2], look: [-0.4, 0.9, 0], yaw: 0.0, shift: 0, auto: 0 },
     seats:   { pos: [1.2, 3.6, 7.8],  look: [-0.4, 0.9, 0], yaw: 0.0, shift: 0, auto: 0 },
     poptop:  { pos: [6.8, 1.5, 6.4],  look: [0, 1.35, 0],   yaw: 0.0, shift: 0, auto: 0 },
@@ -89,7 +89,7 @@ window.AutoN1Van = (function () {
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
 
     const scene = new T.Scene();
-    scene.fog = new T.FogExp2(0x0a0a0b, 0.042);
+    scene.fog = new T.FogExp2(0x17191c, 0.042);
     scene.environment = makeEnvironment(renderer);
 
     const camera = new T.PerspectiveCamera(30, 1, 0.1, 80);
@@ -101,12 +101,12 @@ window.AutoN1Van = (function () {
     key.shadow.camera.left = key.shadow.camera.bottom = -6; key.shadow.camera.right = key.shadow.camera.top = 6; key.shadow.bias = -0.0008; key.shadow.radius = 4;
     scene.add(key);
     const fill = new T.DirectionalLight(0xaac2ff, 1.1); fill.position.set(-6, 4, -5); scene.add(fill);
-    const rim = new T.PointLight(0xff1a2e, 40, 18, 1.4); rim.position.set(-4.5, 1.4, -4.2); scene.add(rim);
+    const rim = new T.PointLight(0xffffff, 18, 18, 1.4); rim.position.set(-4.5, 1.6, -4.2); scene.add(rim);
 
     // Sol + grille technique + ombre de contact
-    const floor = new T.Mesh(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: 0x15161a, roughness: 0.3, metalness: 0.6 }));
+    const floor = new T.Mesh(new T.CircleGeometry(16, 72), new T.MeshStandardMaterial({ color: 0x17191c, roughness: 0.32, metalness: 0.6 }));
     floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
-    const grid = new T.GridHelper(40, 80, 0x3a3b42, 0x24252b); grid.position.y = 0.003; grid.material.transparent = true; grid.material.opacity = 0.42; scene.add(grid);
+    const grid = new T.GridHelper(40, 80, 0x3b4048, 0x2a2e34); grid.position.y = 0.003; grid.material.transparent = true; grid.material.opacity = 0.42; scene.add(grid);
     const contact = new T.Mesh(new T.PlaneGeometry(6.4, 3.4), new T.MeshBasicMaterial({ map: shadowTexture(), transparent: true, opacity: 0.55, depthWrite: false }));
     contact.rotation.x = -Math.PI / 2; contact.position.y = 0.006; scene.add(contact);
 
@@ -115,12 +115,12 @@ window.AutoN1Van = (function () {
     const shell = [];   // matériaux qui s'estompent en mode rayons X
     const glassMats = [];
 
-    const bodyColor = new T.Color(opts.color || '#464a52');
+    const bodyColor = new T.Color(opts.color || '#3B4048');
     const paint = new T.MeshPhysicalMaterial({ color: bodyColor.clone(), metalness: 0.5, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 1.6 });
     const plastic = new T.MeshStandardMaterial({ color: 0x0c0c0e, roughness: 0.85, metalness: 0.1 });
     const chrome = new T.MeshStandardMaterial({ color: 0x8b8f98, roughness: 0.25, metalness: 1 });
     const glass = new T.MeshPhysicalMaterial({ color: 0x0a1119, metalness: 0.15, roughness: 0.04, clearcoat: 1, envMapIntensity: 1.8, transparent: true, opacity: 0.94 });
-    const red = new T.MeshStandardMaterial({ color: 0xd10018, roughness: 0.4, metalness: 0.3 });
+    const red = new T.MeshStandardMaterial({ color: 0xc8102e, roughness: 0.4, metalness: 0.3 });
     shell.push(paint, plastic, chrome, red); glassMats.push(glass);
 
     const bodyGeo = extrude(bodyShape(), 1.9, 0.06);
@@ -200,7 +200,7 @@ window.AutoN1Van = (function () {
 
     // Intérieur : sièges SPECIPRO, cloison R1, chargement
     const seatMat = new T.MeshStandardMaterial({ color: 0x2c2d33, roughness: 0.85 });
-    const seatRed = new T.MeshStandardMaterial({ color: 0xd10018, roughness: 0.6 });
+    const seatRed = new T.MeshStandardMaterial({ color: 0xc8102e, roughness: 0.6 });
     function makeSeat() {
       const g = new T.Group();
       const base = new T.Mesh(new T.BoxGeometry(0.5, 0.12, 0.5), seatMat); base.position.y = 0.36; g.add(base);
@@ -248,7 +248,7 @@ window.AutoN1Van = (function () {
 
     function applyPreset(p) {
       preset = PRESETS[p] || preset;
-      const scaleDist = camera.aspect < 0.95 ? 1.45 : (camera.aspect < 1.4 ? 1.15 : 1);
+      const scaleDist = camera.aspect < 0.8 ? 1.5 : (camera.aspect < 1.1 ? 1.25 : (camera.aspect < 1.4 ? 1.1 : 1));
       wantPos.fromArray(preset.pos).multiplyScalar(scaleDist);
       wantLook.fromArray(preset.look);
       const shift = camera.aspect < 0.95 ? 0 : preset.shift;

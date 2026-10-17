@@ -3,3 +3,5 @@ contexte/
 # Système
 .DS_Store
 **/.DS_Store
+# Charte graphique source (livrable facturé au client, hors dépôt public)
+charte-graphique/

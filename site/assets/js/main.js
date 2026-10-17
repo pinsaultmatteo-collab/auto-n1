@@ -73,7 +73,7 @@
   const heroCanvas = $('#hero-canvas');
   let heroVan = null;
   if (heroCanvas && window.AutoN1Van) {
-    heroVan = AutoN1Van.create(heroCanvas, { preset: 'hero', color: '#464a52', mouseArea: $('.hero') });
+    heroVan = AutoN1Van.create(heroCanvas, { preset: 'hero', color: '#3B4048', mouseArea: $('.hero') });
     if (!heroVan) document.body.classList.add('no-webgl');
     else {
       // Petite chorégraphie d'accueil : la vue technique se dissipe et révèle la carrosserie
@@ -86,7 +86,7 @@
   /* ---------- 3D : section « transformation » ---------- */
   const tCanvas = $('#transform-canvas');
   if (tCanvas && window.AutoN1Van) {
-    const van = AutoN1Van.create(tCanvas, { preset: 'cargo', color: '#464a52', xray: 1, seats: 2, cargo: 1, mouseArea: $('.transform__visual') });
+    const van = AutoN1Van.create(tCanvas, { preset: 'cargo', color: '#3B4048', xray: 1, seats: 2, cargo: 1, mouseArea: $('.transform__visual') });
     if (van) {
       const steps = $$('.step'), tabs = $$('.ttab'), tabsWrap = $('.transform__tabs'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
       const mqMobile = window.matchMedia('(max-width: 1000px)');
@@ -129,7 +129,7 @@
   /* ---------- 3D : configurateur ---------- */
   const cCanvas = $('#config-canvas');
   if (cCanvas && window.AutoN1Van) {
-    const van = AutoN1Van.create(cCanvas, { preset: 'config', color: '#464a52', seats: 5, cargo: 0, mouseArea: $('.config__visual') });
+    const van = AutoN1Van.create(cCanvas, { preset: 'config', color: '#3B4048', seats: 5, cargo: 0, mouseArea: $('.config__visual') });
     const form = $('#configurator');
     if (van && form) {
       const base = parseFloat(form.dataset.base || '55900');
