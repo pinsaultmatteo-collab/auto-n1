@@ -102,8 +102,9 @@
       // Parallaxe souris : le plan flotte légèrement, la trame bouge moins
       const stage = $('.hero--plan');
       if (stage && !isTouch) {
-        stage.addEventListener('pointermove', e => { const r = stage.getBoundingClientRect(); const nx = ((e.clientX - r.left) / r.width - 0.5) * 2, ny = ((e.clientY - r.top) / r.height - 0.5) * 2; gsap.to(plan, { x: nx * 12, y: ny * 8, rotation: nx * 0.4, duration: 0.9, ease: 'power2.out' }); });
-        stage.addEventListener('pointerleave', () => gsap.to(plan, { x: 0, y: 0, rotation: 0, duration: 1.2, ease: 'power2.out' }));
+        const floatLayer = $('#hero-float'), bg = $('.hero__bg img');
+        stage.addEventListener('pointermove', e => { const r = stage.getBoundingClientRect(); const nx = ((e.clientX - r.left) / r.width - 0.5) * 2, ny = ((e.clientY - r.top) / r.height - 0.5) * 2; gsap.to(plan, { x: nx * 12, y: ny * 8, rotation: nx * 0.4, duration: 0.9, ease: 'power2.out' }); if (floatLayer) gsap.to(floatLayer, { x: nx * -26, y: ny * -18, duration: 1.1, ease: 'power2.out' }); if (bg) gsap.to(bg, { xPercent: nx * -1.2, yPercent: ny * -0.8, duration: 1.4, ease: 'power2.out' }); });
+        stage.addEventListener('pointerleave', () => { gsap.to(plan, { x: 0, y: 0, rotation: 0, duration: 1.2, ease: 'power2.out' }); if (floatLayer) gsap.to(floatLayer, { x: 0, y: 0, duration: 1.4 }); if (bg) gsap.to(bg, { xPercent: 0, yPercent: 0, duration: 1.6 }); });
       }
     }
   }

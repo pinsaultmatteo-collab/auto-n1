@@ -869,3 +869,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .config__visual .plan-stage{padding:8% 6% 12%}
 .transform__visual .plan-stage{padding:10% 6% 14%}
 @media (max-width:1000px){.transform__visual .plan-stage{padding:6% 4% 14%}}
+
+/* ---------- Hero : photo de fond, voile, éléments flottants ---------- */
+.hero__bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+.hero__bg img{width:100%;height:100%;object-fit:cover;object-position:62% 55%;filter:saturate(.55) contrast(1.05) brightness(.9);transform-origin:62% 55%;animation:kenburns 28s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.1) translate(-1.5%,-1%)}}
+.hero__shade{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(23,25,28,.98) 0%,rgba(23,25,28,.92) 36%,rgba(23,25,28,.76) 68%,rgba(23,25,28,.86) 100%),linear-gradient(180deg,rgba(23,25,28,.8) 0%,rgba(23,25,28,.15) 38%,rgba(23,25,28,.35) 70%,rgba(23,25,28,.98) 100%)}
+.hero__float{position:absolute;inset:0;z-index:1;pointer-events:none;perspective:900px;will-change:transform}
+.flt{position:absolute;width:var(--s);height:var(--s);color:rgba(255,255,255,.9);opacity:var(--o,.3);animation:flt var(--d,12s) ease-in-out infinite alternate;animation-delay:var(--delay,0s);transform-style:preserve-3d}
+.flt svg{width:100%;height:100%;animation:spin3d var(--r,30s) linear infinite;animation-delay:var(--delay,0s);transform-style:preserve-3d;backface-visibility:visible}
+.flt--red{color:var(--rouge)}
+.flt--red svg{animation:spinflat 6s ease-in-out infinite alternate;animation-delay:var(--delay,0s)}
+@keyframes flt{from{transform:translate3d(0,-14px,0)}to{transform:translate3d(10px,16px,40px)}}
+@keyframes spin3d{from{transform:rotateX(0deg) rotateY(0deg)}to{transform:rotateX(360deg) rotateY(360deg)}}
+@keyframes spinflat{from{transform:rotate(0deg) scale(.9)}to{transform:rotate(180deg) scale(1.1)}}
+.hero--plan .hero__plan-grid{z-index:2}
+.hero__plan{animation:planfloat 7s ease-in-out infinite alternate}
+@keyframes planfloat{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+.hero--plan .trame{display:none}
+@media (prefers-reduced-motion:reduce){.hero__bg img,.flt,.flt svg,.hero__plan{animation:none}}
+@media (max-width:1000px){.hero__shade{background:linear-gradient(180deg,rgba(23,25,28,.9) 0%,rgba(23,25,28,.72) 35%,rgba(23,25,28,.96) 60%,rgba(23,25,28,1) 100%)}.flt{display:none}.flt:nth-child(-n+5){display:block}}
