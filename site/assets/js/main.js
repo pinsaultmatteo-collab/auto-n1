@@ -101,7 +101,7 @@
       tl.to(dims, { opacity: 1, duration: 0.6 }, '-=0.3');
       tl.to(dimLines, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.out' }, '<');
       const hoverMap = [seats, [popOpen, popClosed], $$('.fill.tire', plan), $$('.fill.glass', plan).concat([$('.ln.ghost', plan)])];
-      hoverMap.forEach((els, i) => els.forEach(el => { if (!el) return; el.classList.add('hov'); el.dataset.cursor = 'Détail'; el.addEventListener('mouseenter', () => { paused = true; if (current !== i) show(i); }); el.addEventListener('mouseleave', () => { paused = false; }); }));
+      hoverMap.forEach((els, i) => els.forEach(el => { if (!el) return; el.classList.add('hov'); el.addEventListener('mouseenter', () => { paused = true; if (current !== i) show(i); }); el.addEventListener('mouseleave', () => { paused = false; }); }));
       tl.call(() => { show(0); setInterval(() => { if (!paused) show((current + 1) % callouts.length); }, 4200); });
       // Parallaxe souris : le plan flotte légèrement, la trame bouge moins
       const stage = $('.hero--plan');
@@ -260,13 +260,11 @@
   if (ck) { try { if (!localStorage.getItem('an1-consent')) setTimeout(() => ck.classList.add('is-visible'), 1800); } catch (e) { }
     $$('[data-consent]', ck).forEach(b => b.addEventListener('click', () => { try { localStorage.setItem('an1-consent', b.dataset.consent); } catch (e) { } ck.classList.remove('is-visible'); })); }
 
-  /* ---------- Vie de la page : projecteur, inclinaison, curseur, chiffres ---------- */
+  /* ---------- Vie de la page : projecteur, inclinaison, chiffres ---------- */
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   // Luminance du premier fond opaque trouvé en remontant l'arbre (0 = sombre, 1 = clair)
   const lum = el => { while (el && el !== document.documentElement) { const bg = getComputedStyle(el).backgroundColor; const m = bg && bg.match(/\d+(\.\d+)?/g); if (m && m.length >= 3 && !(m.length === 4 && parseFloat(m[3]) === 0)) return (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255; el = el.parentElement; } return 0.1; };
   if (fine && !reduce) {
-    // Étiquettes du curseur sur les cartes cliquables
-    [['.amen__card', 'Découvrir'], ['.vcard', 'Voir'], ['.mega__card', 'Voir']].forEach(([s, l]) => $$(s).forEach(el => { if (!el.dataset.cursor) el.dataset.cursor = l; }));
     // Projecteur qui suit le pointeur + inclinaison 3D (propriété rotate, lissée en rAF)
     const SPOT = '.tile--service,.engage__tile,.engage__kf,.amen__card,.pillar,.service,.vcard,.review,.scard,.stat,.persona,.mega__card,.info-card,.access>div,.number,.page-hero__meta>div,.soon,.cta-band,.reassure__item,.pricebox,.map-card,.opt,.hud';
     const INVERT = '.tile--service,.engage__tile,.pillar,.review,.access>div,.mega__card';
@@ -282,23 +280,6 @@
       el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height; el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%'); if (canTilt) { tx = (px - 0.5) * 2 * amp; ty = (0.5 - py) * 2 * amp; kick(); } });
       el.addEventListener('pointerleave', () => { tx = 0; ty = 0; kick(); });
     });
-    // Curseur : losange rouge immédiat + repère qui suit avec inertie et épouse les éléments interactifs
-    const cur = document.createElement('div'); cur.className = 'cursor is-hidden'; cur.setAttribute('aria-hidden', 'true');
-    cur.innerHTML = '<i class="cursor__dot"></i><i class="cursor__ring"><span class="cursor__label"></span></i>';
-    document.body.appendChild(cur); document.documentElement.classList.add('has-cursor');
-    const dot = cur.children[0], ring = cur.children[1], label = ring.firstChild;
-    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y, shown = false, moving = 0;
-    const follow = () => { rx += (x - rx) * 0.18; ry += (y - ry) * 0.18; ring.style.translate = rx.toFixed(1) + 'px ' + ry.toFixed(1) + 'px'; moving = (Math.abs(x - rx) > 0.1 || Math.abs(y - ry) > 0.1) ? requestAnimationFrame(follow) : 0; };
-    window.addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (!shown) { shown = true; rx = x; ry = y; cur.classList.remove('is-hidden'); } dot.style.translate = x + 'px ' + y + 'px'; if (!moving) moving = requestAnimationFrame(follow); }, { passive: true });
-    const LINK = 'a,button,[role=button],label,summary,.hotspot,.swatch,.ttab,.chip,.opt,.hov,.callout';
-    document.addEventListener('pointerover', e => {
-      const t = e.target; if (!(t instanceof Element)) return;
-      const view = t.closest('[data-cursor]'), link = t.closest(LINK), field = t.closest('input,textarea,select,iframe,[contenteditable]');
-      if (view) label.textContent = view.dataset.cursor;
-      cur.classList.toggle('is-view', !!view); cur.classList.toggle('is-link', !!link && !view); cur.classList.toggle('is-hidden', !!field); cur.classList.toggle('on-light', lum(t) > 0.5);
-    });
-    document.addEventListener('pointerdown', () => cur.classList.add('is-down')); document.addEventListener('pointerup', () => cur.classList.remove('is-down'));
-    document.addEventListener('mouseleave', () => cur.classList.add('is-hidden')); document.addEventListener('mouseenter', () => { if (shown) cur.classList.remove('is-hidden'); });
     // Les chiffres clés se recomptent au survol
     $$('.stat,.engage__kf,.number,.rating,.kpi,.page-hero__meta>div,.hud').forEach(box => box.addEventListener('mouseenter', () => $$('[data-count]', box).forEach(c => { if (c.dataset.done) countTo(c, 900); })));
   }

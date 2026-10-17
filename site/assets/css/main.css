@@ -1122,22 +1122,5 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .ttab:hover{background:#454a53}
 /* ---- Plan du hero : survoler une partie du fourgon ouvre son repère ---- */
 .plan .hov{pointer-events:all;cursor:pointer}
-/* ---- Curseur : losange rouge + repère qui épouse les éléments interactifs ---- */
-.has-cursor,.has-cursor *{cursor:none!important}
-.has-cursor input,.has-cursor textarea,.has-cursor select,.has-cursor [contenteditable]{cursor:auto!important}
-.cursor{position:fixed;left:0;top:0;z-index:99999;pointer-events:none;transition:opacity .3s}
-.cursor.is-hidden{opacity:0}
-.cursor__dot,.cursor__ring{position:absolute;left:0;top:0;display:grid;place-items:center}
-.cursor__dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--rouge);transform:rotate(45deg);transition:transform .35s var(--ease),opacity .3s}
-.cursor__ring{width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid rgba(255,255,255,.9);transform:rotate(45deg);transition:transform .5s var(--ease),background .35s,border-color .35s,width .4s var(--ease),height .4s var(--ease),margin .4s var(--ease)}
-.cursor.on-light .cursor__ring{border-color:rgba(23,25,28,.8)}
-.cursor__label{font:600 10.5px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:#fff;white-space:nowrap;opacity:0;transform:scale(.6);transition:opacity .25s,transform .4s var(--ease)}
-.cursor.is-link .cursor__ring{transform:rotate(45deg) scale(1.55)}
-.cursor.is-link .cursor__dot{transform:rotate(45deg) scale(.5)}
-.cursor.is-view .cursor__ring{width:86px;height:86px;margin:-43px 0 0 -43px;background:var(--rouge);border-color:var(--rouge);transform:rotate(0)}
-.cursor.is-view .cursor__label{opacity:1;transform:none}
-.cursor.is-view .cursor__dot{opacity:0}
-.cursor.is-down .cursor__ring{transform:rotate(45deg) scale(.8)}
-.cursor.is-down.is-view .cursor__ring{transform:scale(.92)}
 }
 @media (prefers-reduced-motion:reduce){.btn--primary::after,.tag--red::after,.cta-band .btn--outline::before{animation:none}}
