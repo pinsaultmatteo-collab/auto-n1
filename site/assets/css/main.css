@@ -842,3 +842,30 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
   .hero--plan .hero__title{font-size:clamp(34px,9.6vw,46px)}
   .hero__plan-foot{flex-direction:column;align-items:flex-start;gap:8px}
 }
+
+/* ---------- Plans à états (section Lundi→Dimanche, configurateur) ---------- */
+.plan-stage{position:absolute;inset:0;display:grid;place-items:center;padding:6% 5% 10%}
+.plan-stage .plan{width:100%;max-height:100%;margin:0}
+.plan .fill.wall,.plan .table,.plan .cargo{opacity:0;transition:opacity .6s var(--ease)}
+.plan .fill.wall.in,.plan .table.in,.plan .cargo.in{opacity:1}
+.plan .cargo .crate{fill:#6f6a60;stroke:rgba(255,255,255,.55)}
+.plan .cargo .f-top.crate{fill:#8a8478}.plan .cargo .f-side.crate{fill:#5a564e}
+.plan .cargo .red.f-top{fill:var(--rouge)}.plan .cargo .red.f-front{fill:#9b0c24}.plan .cargo .red.f-side{fill:#7e0a1e}
+.plan .pop-closed,.plan .pop-open{transition:opacity .7s var(--ease)}
+.plan.pop .pop-open{opacity:1}.plan.pop .pop-closed{opacity:0}
+.plan .ln.terrain{stroke:var(--rouge);stroke-width:1.4;stroke-dasharray:6 6;opacity:0;transition:opacity .6s}
+.plan.offroad .ln.terrain{opacity:.9}
+.plan .ln.axle{stroke:rgba(207,203,195,.35);stroke-width:1;stroke-dasharray:3 5;opacity:0;transition:opacity .6s}
+.plan.offroad .ln.axle{stroke:var(--rouge);opacity:1}
+.plan.offroad .wheel{stroke:var(--rouge)}
+.plan .f-flank,.plan .f-roof,.plan .f-face{stroke:rgba(255,255,255,.35);stroke-width:1;vector-effect:non-scaling-stroke;transition:fill .5s,fill-opacity .5s}
+.plan .f-flank{fill:var(--paint,#3B4048)}
+.plan .f-roof{fill:color-mix(in srgb,var(--paint,#3B4048) 78%,#fff)}
+.plan .f-face{fill:color-mix(in srgb,var(--paint,#3B4048) 72%,#000)}
+.plan.xray .f-flank,.plan.xray .f-roof,.plan.xray .f-face{fill-opacity:0}
+.plan.xray .fill.glass{fill-opacity:.35}
+.plan .seat.pivot .f-top{fill:var(--rouge)}.plan .seat.pivot .f-front{fill:#9b0c24}.plan .seat.pivot .f-side{fill:#7e0a1e}
+.config__visual{aspect-ratio:4/3}
+.config__visual .plan-stage{padding:8% 6% 12%}
+.transform__visual .plan-stage{padding:10% 6% 14%}
+@media (max-width:1000px){.transform__visual .plan-stage{padding:6% 4% 14%}}

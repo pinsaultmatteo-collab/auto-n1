@@ -8,7 +8,7 @@ SRC, OUT = os.path.join(ROOT, 'src'), os.path.join(ROOT, 'site')
 partials = {n: open(os.path.join(SRC, 'partials', n + '.html'), encoding='utf8').read() for n in ('head', 'nav', 'footer')}
 pages = sorted(glob.glob(os.path.join(SRC, 'pages', '*.html')))
 # Empreinte de version des CSS/JS : invalide le cache navigateur (et le cache long Vercel) à chaque modification
-VERSIONED = ['assets/css/main.css', 'assets/js/main.js', 'assets/js/van3d.js', 'assets/fonts/fonts.css']
+VERSIONED = ['assets/css/main.css', 'assets/js/main.js', 'assets/fonts/fonts.css']
 def fingerprint(rel):
     return hashlib.md5(open(os.path.join(OUT, rel), 'rb').read()).hexdigest()[:8]
 versions = {rel: fingerprint(rel) for rel in VERSIONED}

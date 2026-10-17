@@ -1,6 +1,6 @@
 # AUTO N°1 — Refonte du site vitrine (maquette haute fidélité)
 
-Maquette fonctionnelle du nouveau site auton1.net, réalisée par PMC Marketing pour convaincre le prospect AUTO N°1 (Wimereux). Site statique, sans dépendance réseau : polices, Three.js et GSAP sont embarqués.
+Maquette fonctionnelle du nouveau site auton1.net, réalisée par PMC Marketing pour convaincre le prospect AUTO N°1 (Wimereux). Site statique, sans dépendance réseau : polices et GSAP sont embarqués.
 
 ## Ouvrir la démo
 
@@ -22,22 +22,21 @@ Le site applique la nouvelle charte livrée au client (`charte-graphique/nouvell
 
 ```
 site/                      ← livrable (à ouvrir / à héberger)
-  index.html               Accueil (hero 3D, transformation 3D scrollée, 4 aménagements, promesse, processus, véhicules, avis, stock, manifeste, CTA)
+  index.html               Accueil (hero plan isométrique, accompagnement, transformation Lundi→Dimanche en plan, 4 aménagements, promesse, processus, véhicules, avis, stock, manifeste, CTA)
   amenagements/            4 pages « usage » (cabine approfondie, toit relevable, 4x4, sur mesure) avec SVG interactifs
-  vehicules/               Ford Transit Custom, VW Transporter, page véhicule × aménagement avec configurateur 3D
+  vehicules/               Ford Transit Custom, VW Transporter, page véhicule × aménagement avec configurateur (plan coloré)
   entreprise.html          Chiffres, historique, dirigeant, valeurs, showroom, références
   stock.html               Stock & arrivages avec filtres
   contact.html             Formulaire devis 24h, coordonnées, plan d'accès
   mentions-legales.html · politique-confidentialite.html
   sitemap.xml · robots.txt
   assets/css/main.css      Design system complet (tokens, composants, responsive)
-  assets/js/van3d.js       Fourgon 3D procédural (Three.js) : sièges 2/5/7, toit relevable, rayons X, 4x4, couleur
-  src/tools/hero_plan.py   Générateur du plan isométrique du hero (SVG inline) : relancer puis build.py après modification
+  src/tools/hero_plan.py   Générateur des plans isométriques (hero, Lundi→Dimanche, configurateur) : relancer puis build.py après modification
   assets/js/main.js        Navigation, animations au scroll, compteurs, configurateur, filtres, formulaires (démo)
   assets/img/              64 photos réelles issues du site actuel (renommées, optimisées)
   assets/brand/            logos SVG de la nouvelle charte + kit favicon
   assets/fonts/            Archivo variable (woff2 locaux)
-  assets/vendor/           three.min.js r158, gsap 3.12.5, ScrollTrigger
+  assets/vendor/           gsap 3.12.5, ScrollTrigger
 
 src/                       ← sources : partials (head, nav, footer) + pages ; `python3 build.py` régénère site/ (empreinte ?v= ajoutée aux CSS/JS pour invalider le cache)
 contexte/                  ← fiche de référence, cahier des charges, pré-maquette

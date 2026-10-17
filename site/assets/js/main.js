@@ -69,33 +69,13 @@
     b.addEventListener('mouseleave', () => { b.style.transform = ''; });
   });
 
-  /* ---------- 3D : hero (scène d'assemblage) ---------- */
-  const heroCanvas = $('#hero-canvas');
-  let heroVan = null;
-  if (heroCanvas && window.AutoN1Van) {
-    heroVan = AutoN1Van.create(heroCanvas, { preset: 'hero', color: '#4a4f58', mouseArea: $('.hero'), explode: 1, intro: 1, xray: 1, seats: 7, cargo: 0 });
-    if (!heroVan) document.body.classList.add('no-webgl');
-    else {
-      const steps = $$('.hero__steps span');
-      const mark = i => steps.forEach((s, j) => s.classList.toggle('is-on', j === i));
-      // 1. vue éclatée en plan technique → 2. les pièces s'assemblent, la caméra descend → 3. la carrosserie se matérialise, cabine SPECIPRO en place
-      const t0 = reduce ? 0 : 600;
-      setTimeout(() => { heroVan.set({ explode: 0, intro: 0 }, reduce ? 0 : 2.8, 'power3.inOut'); mark(1); }, t0);
-      setTimeout(() => { heroVan.set({ xray: 0 }, reduce ? 0 : 1.6); mark(2); }, t0 + 2300);
-      setTimeout(() => { heroVan.set({ seats: 5 }, 1.2); }, t0 + 4600);
-      // Parallaxe douce de la scène au défilement
-      const stage = $('.hero--stage'), wrap = $('.hero--stage .hero__canvas');
-      if (stage && wrap && !reduce) window.addEventListener('scroll', () => { const y = Math.min(window.scrollY, stage.offsetHeight); wrap.style.transform = `translateY(${y * 0.22}px)`; }, { passive: true });
-    }
-  }
-
   /* ---------- Hero : plan d'atelier isométrique ---------- */
   const plan = $('#hero-plan svg');
   if (plan) {
     const all = $$('.ln', plan);
     const lines = all.filter(l => !l.closest('.callout') && !l.closest('.dim') && !l.closest('.pop-open'));
     const seats = $$('.seat', plan), callouts = $$('.callout', plan), dims = $$('.dim', plan), dimLines = $$('.dim .ln', plan);
-    const popOpen = $('#pop-open', plan), popClosed = $('#pop-closed', plan), stepEl = $('#plan-step');
+    const popOpen = $('.pop-open', plan), popClosed = $('.pop-closed', plan), stepEl = $('#plan-step');
     const hotTargets = [seats, [popOpen], $$('.wheel', plan).concat($$('.hub', plan)), [$('.ln.main', plan)]];
     const stepNames = ['Cabine SPECIPRO', 'Toit relevable', '4x4', 'Homologation DREAL'];
     const prep = l => { const L = l.getTotalLength ? l.getTotalLength() : 0; l.style.strokeDasharray = L; l.style.strokeDashoffset = L; return L; };
@@ -128,72 +108,80 @@
     }
   }
 
-  /* ---------- 3D : section « transformation » ---------- */
-  const tCanvas = $('#transform-canvas');
-  if (tCanvas && window.AutoN1Van) {
-    const van = AutoN1Van.create(tCanvas, { preset: 'cargo', color: '#3B4048', xray: 1, seats: 2, cargo: 1, mouseArea: $('.transform__visual') });
-    if (van) {
-      const steps = $$('.step'), tabs = $$('.ttab'), tabsWrap = $('.transform__tabs'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
-      const mqMobile = window.matchMedia('(max-width: 1000px)');
-      let current = 0, triggers = [], stepIo = null, timer = null;
-      const activate = i => {
-        current = i;
-        steps.forEach((s, j) => s.classList.toggle('is-active', j === i));
-        tabs.forEach((t, j) => { t.classList.toggle('is-active', j === i); t.setAttribute('aria-selected', j === i); });
-        const s = steps[i]; if (!s) return;
-        van.apply(s.dataset.preset);
-        if (day) { day.style.opacity = 0; setTimeout(() => { day.textContent = s.dataset.day || ''; day.style.opacity = 1; }, 200); }
-        if (hudPlaces) hudPlaces.innerHTML = s.dataset.places || '';
-        if (hudMode) hudMode.textContent = s.dataset.mode || '';
-        if (hudTime) hudTime.textContent = s.dataset.time || '';
-      };
-      // Desktop : la 3D reste épinglée, les étapes défilent
-      const setupDesktop = () => {
-        if (hasGsap) triggers = steps.map((s, i) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 45%', onEnter: () => activate(i), onEnterBack: () => activate(i) }));
-        else { stepIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) activate(steps.indexOf(e.target)); }), { threshold: 0.5 }); steps.forEach(s => stepIo.observe(s)); }
-        activate(0);
-      };
-      const teardownDesktop = () => { triggers.forEach(t => t.kill()); triggers = []; if (stepIo) { stepIo.disconnect(); stepIo = null; } };
-      // Mobile : onglets, défilement automatique toutes les 5 s, balayage sur la 3D
-      const stopAuto = () => { if (timer) clearInterval(timer); timer = null; };
-      const startAuto = () => { stopAuto(); if (reduce) return; tabsWrap && tabsWrap.classList.remove('is-paused'); timer = setInterval(() => activate((current + 1) % steps.length), 5000); };
-      const userPick = i => { stopAuto(); tabsWrap && tabsWrap.classList.add('is-paused'); activate((i + steps.length) % steps.length); };
-      const setupMobile = () => { activate(0); startAuto(); };
-      tabs.forEach((t, i) => t.addEventListener('click', () => userPick(i)));
-      const swipeArea = $('.transform__visual'); let x0 = null;
-      if (swipeArea) {
-        swipeArea.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
-        swipeArea.addEventListener('touchend', e => { if (x0 == null || !mqMobile.matches) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) userPick(current + (dx < 0 ? 1 : -1)); }, { passive: true });
-      }
-      const applyMode = () => { if (mqMobile.matches) { teardownDesktop(); setupMobile(); } else { stopAuto(); setupDesktop(); } };
-      applyMode();
-      mqMobile.addEventListener('change', applyMode);
+  /* ---------- Plans à états : utilitaire commun ---------- */
+  const setPlanState = (svg, st) => {
+    if (!svg) return;
+    $$('.seat', svg).forEach((s, i) => { s.classList.toggle('in', i < (st.seats || 0)); s.classList.toggle('pivot', !!st.pivot && i < 2); });
+    const wall = $('.fill.wall', svg), table = $('.table', svg), cargo = $('.cargo', svg);
+    if (wall) wall.classList.toggle('in', !!st.wall);
+    if (table) table.classList.toggle('in', !!st.table);
+    if (cargo) cargo.classList.toggle('in', !!st.cargo);
+    svg.classList.toggle('pop', !!st.pop); svg.classList.toggle('offroad', !!st.offroad); svg.classList.toggle('xray', !!st.xray);
+    if (st.paint) svg.style.setProperty('--paint', st.paint);
+  };
+
+  /* ---------- Section « transformation » : plan à quatre états ---------- */
+  const tPlan = $('#transform-plan svg');
+  if (tPlan) {
+    const states = { cargo: { seats: 2, wall: true, cargo: true }, seats: { seats: 7, table: true }, poptop: { seats: 5, pop: true, table: true }, offroad: { seats: 5, offroad: true } };
+    const steps = $$('.step'), tabs = $$('.ttab'), tabsWrap = $('.transform__tabs'), day = $('.transform__day'), hudPlaces = $('#hud-places'), hudMode = $('#hud-mode'), hudTime = $('#hud-time');
+    const mqMobile = window.matchMedia('(max-width: 1000px)');
+    let current = 0, triggers = [], stepIo = null, timer = null;
+    const activate = i => {
+      current = i;
+      steps.forEach((s, j) => s.classList.toggle('is-active', j === i));
+      tabs.forEach((t, j) => { t.classList.toggle('is-active', j === i); t.setAttribute('aria-selected', j === i); });
+      const s = steps[i]; if (!s) return;
+      setPlanState(tPlan, states[s.dataset.preset] || states.cargo);
+      if (day) { day.style.opacity = 0; setTimeout(() => { day.textContent = s.dataset.day || ''; day.style.opacity = 1; }, 200); }
+      if (hudPlaces) hudPlaces.innerHTML = s.dataset.places || '';
+      if (hudMode) hudMode.textContent = s.dataset.mode || '';
+      if (hudTime) hudTime.textContent = s.dataset.time || '';
+    };
+    const setupDesktop = () => {
+      if (hasGsap) triggers = steps.map((s, i) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 45%', onEnter: () => activate(i), onEnterBack: () => activate(i) }));
+      else { stepIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) activate(steps.indexOf(e.target)); }), { threshold: 0.5 }); steps.forEach(s => stepIo.observe(s)); }
+      activate(0);
+    };
+    const teardownDesktop = () => { triggers.forEach(t => t.kill()); triggers = []; if (stepIo) { stepIo.disconnect(); stepIo = null; } };
+    const stopAuto = () => { if (timer) clearInterval(timer); timer = null; };
+    const startAuto = () => { stopAuto(); if (reduce) return; tabsWrap && tabsWrap.classList.remove('is-paused'); timer = setInterval(() => activate((current + 1) % steps.length), 5000); };
+    const userPick = i => { stopAuto(); tabsWrap && tabsWrap.classList.add('is-paused'); activate((i + steps.length) % steps.length); };
+    tabs.forEach((t, i) => t.addEventListener('click', () => userPick(i)));
+    const swipeArea = $('.transform__visual'); let x0 = null;
+    if (swipeArea) {
+      swipeArea.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+      swipeArea.addEventListener('touchend', e => { if (x0 == null || !mqMobile.matches) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) userPick(current + (dx < 0 ? 1 : -1)); }, { passive: true });
     }
+    const applyMode = () => { if (mqMobile.matches) { teardownDesktop(); activate(0); startAuto(); } else { stopAuto(); setupDesktop(); } };
+    applyMode(); mqMobile.addEventListener('change', applyMode);
   }
 
-  /* ---------- 3D : configurateur ---------- */
-  const cCanvas = $('#config-canvas');
-  if (cCanvas && window.AutoN1Van) {
-    const van = AutoN1Van.create(cCanvas, { preset: 'config', color: '#3B4048', seats: 5, cargo: 0, mouseArea: $('.config__visual') });
-    const form = $('#configurator');
-    if (van && form) {
-      const base = parseFloat(form.dataset.base || '55900');
-      const total = $('#cfg-total'), lines = $('#cfg-lines'), quote = $('#cfg-quote'), sub = $('#cfg-sub');
-      $$('.swatch', form).forEach(sw => sw.addEventListener('click', () => { $$('.swatch', form).forEach(s => s.classList.remove('is-active')); sw.classList.add('is-active'); van.setColor(sw.dataset.color); compute(); }));
-      $$('[data-view]', form).forEach(b => b.addEventListener('click', () => { $$('[data-view]', form).forEach(x => x.classList.remove('is-active')); b.classList.add('is-active'); const v = b.dataset.view; if (v === 'xray') van.set({ xray: 1 }); else van.set({ xray: 0 }); van.setPreset(v === 'xray' ? 'seats' : 'config'); }));
-      const compute = () => {
-        const fin = form.elements.finition, mot = form.elements.motorisation, places = form.elements.places;
-        const onQuote = (fin && fin.selectedOptions[0].dataset.quote) || (mot && mot.selectedOptions[0].dataset.quote);
-        let sum = base; const items = [];
-        if (places && places.value === '7') { sum += 1090; items.push(['Version 7 sièges (3 rangs)', 1090]); van.set({ seats: 7 }); } else van.set({ seats: 5 });
-        $$('input[type=checkbox]:checked', form).forEach(c => { const p = parseFloat(c.dataset.price || '0'); sum += p; items.push([c.dataset.label || c.value, p]); });
-        if (lines) lines.innerHTML = [['Ford Transit Custom ' + (fin ? fin.selectedOptions[0].text : ''), base]].concat(items).map(([l, p]) => `<li><span>${l}</span><span>${onQuote ? '—' : fmt(p, 0) + ' € HT'}</span></li>`).join('');
-        if (total) total.innerHTML = onQuote ? 'Sur devis <em>personnalisé</em>' : fmt(sum, 0) + ' € <em>HT</em>';
-        if (sub) sub.textContent = onQuote ? 'Cette configuration fait l’objet d’un chiffrage sous 24 h par votre conseiller.' : 'Prix indicatif hors frais d’immatriculation. Disponibilité : sur stock ou arrivage.';
-        if (quote) quote.textContent = onQuote ? 'Recevoir mon devis sous 24h' : 'Réserver cette configuration';
-      };
-      form.addEventListener('change', compute); compute();
-    }
+  /* ---------- Configurateur : plan coloré ---------- */
+  const cPlan = $('#config-plan svg');
+  const form = $('#configurator');
+  if (cPlan && form) {
+    const base = parseFloat(form.dataset.base || '55900');
+    const total = $('#cfg-total'), lines = $('#cfg-lines'), quote = $('#cfg-quote'), sub = $('#cfg-sub');
+    const view = { xray: false, paint: '#3B4048' };
+    $$('.swatch', form).forEach(sw => sw.addEventListener('click', () => { $$('.swatch', form).forEach(s => s.classList.remove('is-active')); sw.classList.add('is-active'); view.paint = sw.dataset.color; compute(); }));
+    $$('[data-view]', form).forEach(b => b.addEventListener('click', () => { $$('[data-view]', form).forEach(x => x.classList.remove('is-active')); b.classList.add('is-active'); view.xray = b.dataset.view === 'xray'; compute(); }));
+    const compute = () => {
+      const fin = form.elements.finition, mot = form.elements.motorisation, places = form.elements.places;
+      const onQuote = (fin && fin.selectedOptions[0].dataset.quote) || (mot && mot.selectedOptions[0].dataset.quote);
+      let sum = base; const items = [];
+      const seven = places && places.value === '7';
+      if (seven) { sum += 1090; items.push(['Version 7 sièges (3 rangs)', 1090]); }
+      const checked = $$('input[type=checkbox]:checked', form);
+      checked.forEach(c => { const p = parseFloat(c.dataset.price || '0'); sum += p; items.push([c.dataset.label || c.value, p]); });
+      const has = v => checked.some(c => c.value === v);
+      setPlanState(cPlan, { seats: seven ? 7 : 5, table: has('table'), wall: has('cloison'), pivot: has('pivot'), xray: view.xray, paint: view.paint });
+      if (lines) lines.innerHTML = [['Ford Transit Custom ' + (fin ? fin.selectedOptions[0].text : ''), base]].concat(items).map(([l, p]) => `<li><span>${l}</span><span>${onQuote ? '—' : fmt(p, 0) + ' € HT'}</span></li>`).join('');
+      if (total) total.innerHTML = onQuote ? 'Sur devis <em>personnalisé</em>' : fmt(sum, 0) + ' € <em>HT</em>';
+      if (sub) sub.textContent = onQuote ? 'Cette configuration fait l’objet d’un chiffrage sous 24 h par votre conseiller.' : 'Prix indicatif hors frais d’immatriculation. Disponibilité : sur stock ou arrivage.';
+      if (quote) quote.textContent = onQuote ? 'Recevoir mon devis sous 24h' : 'Réserver cette configuration';
+    };
+    form.addEventListener('change', compute); compute();
   }
 
   /* ---------- Processus (SVG dessiné au scroll) ---------- */
