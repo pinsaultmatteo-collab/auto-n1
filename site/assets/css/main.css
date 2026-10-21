@@ -1350,3 +1350,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .dims__note .link{font-size:13.5px;margin-left:4px}
 @media (max-width:1000px){.dims__grid{grid-template-columns:1fr}.dim-table tbody th{width:40%}.dim-table td{font-size:15px}}
 @media (max-width:560px){.dims__tabs{grid-template-columns:1fr 1fr 1fr}.dtab{padding:10px 8px 12px;font-size:13px}.dtab small{display:none}.dim-table th,.dim-table td{padding:9px 6px}.dim-table td{white-space:normal}}
+/* Réalisation en vedette (MS-RT) : carte double largeur */
+.realisations .scard--wide{grid-column:span 2}
+.realisations .scard--wide .scard__media{aspect-ratio:16/9}
+.realisations .scard--wide .scard__body h3{font-size:clamp(22px,2vw,28px)}
+.realisations .scard--wide .scard__tags .tag--red{background:var(--rouge)}
+@media (max-width:1000px){.realisations .scard--wide{grid-column:span 2}}
+@media (max-width:700px){.realisations .scard--wide{grid-column:auto}.realisations .scard--wide .scard__media{aspect-ratio:4/3}}
