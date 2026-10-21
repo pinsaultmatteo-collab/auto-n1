@@ -1350,7 +1350,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 .rdv__actions{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 .rdv .btn--ghost{color:var(--anthracite)}
 .rdv--compact{margin:0 0 24px}
-.rdv-inline{color:inherit;font-weight:800}
+.footer address b.rdv-inline{display:inline;font-size:inherit;font-weight:700;font-stretch:100%;font-variation-settings:"wdth" 100;margin:0;color:#fff}
 @media (max-width:860px){.rdv{grid-template-columns:auto minmax(0,1fr)}.rdv__actions{grid-column:1/-1;justify-content:flex-start}}
 @media (max-width:520px){.rdv{grid-template-columns:1fr}.rdv__ico{display:none}}
 /* galerie dans la carte */
