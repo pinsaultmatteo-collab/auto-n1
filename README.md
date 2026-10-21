@@ -51,4 +51,8 @@ contexte/                  ← fiche de référence, cahier des charges, pré-ma
 - Prix : seul le Transit Custom Sport SPECIPRO à 55 900 € HT et les 4 options proviennent du site actuel ; les autres configurations sont « sur devis ».
 - Stock : 4 véhicules réels du site actuel + 3 « arrivages » illustratifs ; brancher le flux réel (saisie CMS ou Leboncoin) en phase de développement.
 - Mentions légales : hébergeur et n° de TVA intracommunautaire à compléter.
-- Dimensions indicatives (L2H1 5 450 mm, 1 990 mm, longueurs de chargement) : à vérifier sur fiche constructeur.
+- Dimensions : bloc « Dimensions & volumes » en place sur la page Ford Transit Custom (plan isométrique à trois configurations + deux tableaux). Les cellules « à confirmer » attendent le tableau Excel des cotes (équipements pliés / dépliés, L1 / L2, toit relevable) que le client prépare ; les cotes extérieures affichées sont des données constructeur à vérifier.
+- Carte « Partout en France » (accueil) : 327 points clients relevés sur la carte Leboncoin fournie par le client (positions approximatives, 85 départements). Point de vente Paris : adresse et modalités exactes à préciser par le client (affiché « sur rendez-vous »).
+- Showroom : les véhicules sont visibles uniquement sur rendez-vous (le dirigeant n'est pas toujours à l'agence). Mention reprise dans le hero, l'encart des réalisations, la page Stock, le pied de page et la page Contact.
+- Galeries « Nos réalisations » : 6 véhicules avec slider photo, montés avec les photos du site actuel. À enrichir avec les photos du Drive du client (dossier MSRT en priorité : Ford Transit Custom MS-RT, vitrine atelier hors stock) dès que les fichiers sont disponibles localement (le Drive n'est pas accessible sans connexion).
+- Page « Accessoires » : demandée par le client pour plus tard, non construite. Prévoir une entrée de menu et une page `accessoires.html` (grille produits + demande de devis).

@@ -113,4 +113,5 @@ def inject(page, marker, svg):
     open(p, 'w', encoding='utf8').write(new); print(f"{page} · {marker} : {len(svg)} octets")
 inject('index.html', 'PLAN', build())
 inject('index.html', 'PLAN2', build(callouts=False, dims=False, cargo=True, terrain=True, label="Plan isométrique du fourgon selon le moment de la semaine", extra_class="plan--states"))
+inject('vehicules-ford-transit-custom.html', 'PLAN4', build(callouts=False, dims=True, fills=True, cargo=True, label="Plan isométrique coté du Ford Transit Custom L2H1 aménagé", extra_class="plan--states plan--dims"))
 inject('vehicules-ford-transit-custom-cabine-approfondie.html', 'PLAN3', build(callouts=False, dims=True, fills=True, label="Plan isométrique du Ford Transit Custom configuré", extra_class="plan--config"))

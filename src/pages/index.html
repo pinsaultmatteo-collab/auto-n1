@@ -5,6 +5,7 @@ path: index.html
 canonical: 
 page: home
 bodyclass: is-home
+scripts: map
 ogimg: transit-sport-gris-sieges.jpg
 -->
 <div class="preloader" aria-hidden="true"><div class="preloader__inner"><img class="preloader__mark" src="assets/brand/logo-bloc-reduit_negatif.svg" alt="" width="81" height="91"><div class="preloader__bar"><i></i></div><span class="preloader__txt">Fourgons aménagés sur mesure</span></div></div>
@@ -40,7 +41,7 @@ ogimg: transit-sport-gris-sieges.jpg
   </div>
   <div class="container hero__plan-grid">
     <div class="hero__copy">
-      <span class="eyebrow">Wimereux · Côte d'Opale</span>
+      <span class="eyebrow">Wimereux · Paris · livraison partout en France</span>
       <h1 class="hero__title h1">
         <span class="line"><span>Votre fourgon,</span></span>
         <span class="line"><span>aménagé pour</span></span>
@@ -54,7 +55,7 @@ ogimg: transit-sport-gris-sieges.jpg
       <ul class="hero__proof">
         <li>100 % homologués DREAL</li>
         <li>265 avis Google · 5,0 / 5</li>
-        <li>Atelier à Wimereux depuis 2004</li>
+        <li>Showroom à Wimereux · visite sur rendez-vous</li>
       </ul>
     </div>
     <div class="hero__plan" id="hero-plan">
@@ -475,6 +476,34 @@ ogimg: transit-sport-gris-sieges.jpg
   </div>
 </section>
 
+<!-- ===================== PARTOUT EN FRANCE ===================== -->
+<section class="section france" id="partout-en-france">
+  <div class="container">
+    <div class="france__grid">
+      <div class="france__copy">
+        <span class="eyebrow reveal">Wimereux · Paris · toute la France</span>
+        <h2 class="h2 split-lines mt-1"><span class="line"><span>Deux points de vente.</span></span><span class="line"><span>Des clients <span class="outline">partout en France.</span></span></span></h2>
+        <p class="lead reveal mt-2">Notre showroom et notre atelier sont à Wimereux, sur la Côte d'Opale, et nous recevons aussi sur rendez-vous à Paris. Mais nos fourgons roulent dans toute la France : chaque point est un véhicule que nous avons aménagé, immatriculé et livré, de Dunkerque à Marseille.</p>
+        <div class="france__kf reveal">
+          <div><b><span data-count="327">0</span></b><span>véhicules livrés</span></div>
+          <div><b><span data-count="85">0</span></b><span>départements</span></div>
+          <div><b>2</b><span>points de rendez-vous</span></div>
+        </div>
+        <ul class="france__sites reveal">
+          <li class="is-main"><i></i><div><b>Wimereux · Showroom &amp; atelier</b><span>30 rue du Baston, 62930 Wimereux — véhicules visibles sur rendez-vous, le dirigeant vous reçoit personnellement.</span></div></li>
+          <li><i></i><div><b>Paris · Sur rendez-vous</b><span>Nous venons à votre rencontre en région parisienne, sur simple demande.</span></div></li>
+          <li class="is-client"><i></i><div><b>Partout en France · Livraison incluse</b><span>Votre fourgon arrive immatriculé et préparé dans votre entreprise, carte grise en main.</span></div></li>
+        </ul>
+        <div class="btn-row mt-3 reveal"><a class="btn btn--primary" href="contact.html#devis"><span>Prendre rendez-vous</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn--ghost" href="#accompagnement"><span>Comment se passe la livraison</span></a></div>
+      </div>
+      <div class="fmap" data-france-map aria-label="Carte interactive des clients AUTO N°1">
+        <div class="fmap__stage"><div class="fmap__shadow" aria-hidden="true"></div><div class="fmap__float"></div></div>
+        <div class="fmap__legend" aria-hidden="true"><span><i class="l-client"></i>Véhicule livré</span><span><i class="l-site"></i>Point de vente</span><span><i class="l-route"></i>Livraison en cours</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== AVIS ===================== -->
 <section class="section light" id="avis">
   <div class="container">
@@ -499,17 +528,85 @@ ogimg: transit-sport-gris-sieges.jpg
   </div>
 </section>
 
-<!-- ===================== STOCK ===================== -->
-<section class="section" id="stock-home">
+<!-- ===================== RÉALISATIONS ===================== -->
+<section class="section" id="realisations">
   <div class="container">
     <div class="section-head section-head--split">
-      <div><span class="eyebrow reveal">Disponibles immédiatement</span><h2 class="h2 split-lines mt-1"><span class="line"><span>En stock à</span></span><span class="line"><span><span class="outline">Wimereux.</span></span></span></h2></div>
-      <div class="reveal"><p class="lead">Des véhicules neufs aménagés, prêts à être immatriculés et livrés. Pendant que les constructeurs annoncent des mois de délai, vous repartez avec le vôtre.</p><a class="btn btn--ghost mt-2" href="stock.html"><span>Voir tout le stock</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <div><span class="eyebrow reveal">Sortis de l'atelier</span><h2 class="h2 split-lines mt-1"><span class="line"><span>Nos réalisations,</span></span><span class="line"><span>en <span class="outline">vrai.</span></span></span></h2></div>
+      <div class="reveal"><p class="lead">Chaque fourgon qui sort de Wimereux est unique. Faites défiler les photos : extérieur, cabine, rangements, toit. Certains sont disponibles immédiatement, les autres ont déjà rejoint leur entreprise.</p><a class="btn btn--ghost mt-2" href="stock.html"><span>Voir le stock disponible</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
     </div>
-    <div class="grid stock-grid">
-      <article class="scard reveal"><div class="scard__media"><img src="assets/img/transit-sport-gris-sieges.jpg" alt="Ford Transit Custom Sport L2H1 cabine SPECIPRO" loading="lazy"><span class="tag tag--red">Neuf · Disponible</span><span class="tag">Cabine approfondie</span></div><div class="scard__body"><span class="dim">Ford · Modèle 2025</span><h3>Transit Custom Sport L2H1 — Cabine SPECIPRO</h3><div class="specs"><span>2.0 EcoBlue 170 ch</span><span>BVA8</span><span>5 sièges · CG 7 places</span><span>Garantie 24 mois</span></div><div class="scard__foot"><div class="price"><small>À partir de</small>55 900 €<em>HT</em></div><a class="link link--red" href="vehicules/ford-transit-custom-cabine-approfondie.html">Configurer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></article>
-      <article class="scard reveal reveal-d1"><div class="scard__media"><img src="assets/img/transit-gris-sieges-34.jpg" alt="Ford Transit Custom Sport bi-ton gris Matter et noir" loading="lazy"><span class="tag tag--red">Modèle unique</span><span class="tag">Cabine approfondie</span></div><div class="scard__body"><span class="dim">Ford · Bi-ton Gris Matter / Noir</span><h3>Transit Custom Sport 2025 — Bi-ton</h3><div class="specs"><span>EcoBlue 170 ch</span><span>BVA8</span><span>De 2 à 7 places</span><span>Véhicule neuf</span></div><div class="scard__foot"><div class="price"><small>Prix</small>Nous consulter</div><a class="link link--red" href="contact.html#devis">Demander <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></article>
-      <article class="scard reveal reveal-d2"><div class="scard__media"><img src="assets/img/transporter-noir-sieges.jpg" alt="Volkswagen Transporter cabine SPECIPRO et toit relevable" loading="lazy"><span class="tag tag--red">Neuf · Disponible</span><span class="tag">Toit relevable</span></div><div class="scard__body"><span class="dim">Volkswagen · Nouveau Transporter</span><h3>Transporter — SPECIPRO &amp; toit relevable</h3><div class="specs"><span>Lit intégré</span><span>LED périphériques</span><span>Sièges amovibles</span><span>Garantie constructeur</span></div><div class="scard__foot"><div class="price"><small>Prix</small>Nous consulter</div><a class="link link--red" href="vehicules/volkswagen-transporter.html">Découvrir <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div></article>
+    <div class="rdv reveal" id="rendez-vous">
+      <div class="rdv__ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 12h32v30H8z M8 20h32 M16 6v10 M32 6v10"/><path style="stroke:var(--rouge)" d="M20 28h8v8h-8z"/></svg></div>
+      <div class="rdv__text"><b>Véhicules visibles sur rendez-vous uniquement</b><span>Notre dirigeant est souvent en livraison ou en clientèle : appelez avant de venir au showroom de Wimereux, et il vous reçoit personnellement, en semaine comme le samedi. Rendez-vous possibles aussi à Paris.</span></div>
+      <div class="rdv__actions"><a class="btn btn--primary btn--sm" href="tel:+33321336396"><span>03 21 33 63 96</span></a><a class="btn btn--ghost btn--sm" href="contact.html#devis"><span>Réserver un créneau</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    </div>
+    <div class="grid stock-grid realisations">
+      <article class="scard reveal">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transit-sport-gris-sieges.jpg" alt="Ford Transit Custom Sport gris, sièges SPECIPRO déposés devant le showroom" loading="lazy" decoding="async"><img src="assets/img/transit-gris-sieges-face.jpg" alt="Ford Transit Custom Sport gris, vue de face avec sièges" loading="lazy" decoding="async"><img src="assets/img/interieur-table-sieges.jpg" alt="Intérieur cabine SPECIPRO avec table et sièges face à face" loading="lazy" decoding="async"><img src="assets/img/rang-3-sieges.jpg" alt="Troisième rang de sièges entre les passages de roues" loading="lazy" decoding="async"><img src="assets/img/sieges-cuir-avant.jpg" alt="Sièges avant cuir du Transit Custom" loading="lazy" decoding="async"><img src="assets/img/rangement-tiroir.jpg" alt="Tiroir de rangement intégré" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 6</span>
+          <div class="scard__tags"><span class="tag tag--red">Disponible</span><span class="tag">Cabine approfondie</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Ford · Modèle 2025 · En stock</span><h3>Transit Custom Sport L2H1 — Cabine SPECIPRO</h3><div class="specs"><span>2.0 EcoBlue 170 ch</span><span>BVA8</span><span>5 sièges · CG 7 places</span><span>Garantie 24 mois</span></div><div class="scard__foot"><div class="price"><small>À partir de</small>55 900 €<em>HT</em></div><a class="link link--red" href="vehicules/ford-transit-custom-cabine-approfondie.html">Configurer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
+      <article class="scard reveal reveal-d1">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transit-gris-sieges-34.jpg" alt="Ford Transit Custom Sport bi-ton gris Matter et noir, vue trois quarts" loading="lazy" decoding="async"><img src="assets/img/interieur-sieges-table-2.jpg" alt="Intérieur avec sièges et table, portes ouvertes" loading="lazy" decoding="async"><img src="assets/img/interieur-face-a-face-2.jpg" alt="Sièges face à face dans la cabine approfondie" loading="lazy" decoding="async"><img src="assets/img/cockpit-ford.jpg" alt="Poste de conduite du Ford Transit Custom" loading="lazy" decoding="async"><img src="assets/img/ecran-tactile.jpg" alt="Écran tactile central du Transit Custom" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 5</span>
+          <div class="scard__tags"><span class="tag tag--red">Modèle unique</span><span class="tag">Cabine approfondie</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Ford · Bi-ton Gris Matter / Noir</span><h3>Transit Custom Sport 2025 — Bi-ton</h3><div class="specs"><span>EcoBlue 170 ch</span><span>BVA8</span><span>De 2 à 7 places</span><span>Véhicule neuf</span></div><div class="scard__foot"><div class="price"><small>Prix</small>Nous consulter</div><a class="link link--red" href="contact.html#devis">Demander <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
+      <article class="scard reveal reveal-d2">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transit-trail-bleu-sieges.jpg" alt="Ford Transit Custom Trail 4x4 bleu avec sièges SPECIPRO déposés" loading="lazy" decoding="async"><img src="assets/img/transit-bleu-face-sieges.jpg" alt="Transit Custom Trail bleu, vue de face avec sièges" loading="lazy" decoding="async"><img src="assets/img/transit-bleu-sieges-2.jpg" alt="Transit Custom Trail bleu, sièges amovibles" loading="lazy" decoding="async"><img src="assets/img/transit-bleu-face.jpg" alt="Transit Custom Trail bleu, face avant" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 4</span>
+          <div class="scard__tags"><span class="tag tag--red">Réalisation client</span><span class="tag">4x4</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Ford · Trail 4x4 · Livré à son entreprise</span><h3>Transit Custom Trail 4x4 — Cabine SPECIPRO</h3><div class="specs"><span>Transmission intégrale</span><span>2 → 7 places</span><span>Cloison amovible</span><span>Homologué DREAL</span></div><div class="scard__foot"><div class="price"><small>Aménagement</small>Sur mesure</div><a class="link link--red" href="amenagements/4x4.html">Les 4x4 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
+      <article class="scard reveal">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transit-gris-toit-relevable-ouvert.jpg" alt="Ford Transit Custom gris, toit relevable ouvert" loading="lazy" decoding="async"><img src="assets/img/transit-gris-toit-ouvert-face.jpg" alt="Transit Custom toit relevable ouvert, vue de face" loading="lazy" decoding="async"><img src="assets/img/transit-gris-toit-relevable-sieges.jpg" alt="Transit Custom toit relevable avec sièges SPECIPRO" loading="lazy" decoding="async"><img src="assets/img/toit-relevable-lit.jpg" alt="Lit intégré sous le toit relevable" loading="lazy" decoding="async"><img src="assets/img/toit-relevable-interieur-led.jpg" alt="Intérieur du toit relevable avec éclairage LED" loading="lazy" decoding="async"><img src="assets/img/transit-gris-toit-relevable-duo.jpg" alt="Deux Transit Custom toit relevable devant le showroom" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 6</span>
+          <div class="scard__tags"><span class="tag tag--red">Réalisation client</span><span class="tag">Toit relevable</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Ford · Toit relevable · Livré à son propriétaire</span><h3>Transit Custom — Toit relevable & SPECIPRO</h3><div class="specs"><span>Lit sur sommier</span><span>LED périphériques</span><span>5 places · CG 7</span><span>Ouverture en 30 s</span></div><div class="scard__foot"><div class="price"><small>Aménagement</small>Sur mesure</div><a class="link link--red" href="amenagements/toit-relevable.html">Le toit relevable <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
+      <article class="scard reveal reveal-d1">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transporter-noir-sieges.jpg" alt="Volkswagen Transporter noir avec sièges SPECIPRO déposés" loading="lazy" decoding="async"><img src="assets/img/badge-4motion.jpg" alt="Badge 4Motion du Volkswagen Transporter" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 2</span>
+          <div class="scard__tags"><span class="tag tag--red">Disponible</span><span class="tag">Toit relevable</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Volkswagen · Nouveau Transporter · En stock</span><h3>Transporter — SPECIPRO & toit relevable</h3><div class="specs"><span>Lit intégré</span><span>LED périphériques</span><span>Sièges amovibles</span><span>Garantie constructeur</span></div><div class="scard__foot"><div class="price"><small>Prix</small>Nous consulter</div><a class="link link--red" href="vehicules/volkswagen-transporter.html">Découvrir <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
+      <article class="scard reveal reveal-d2">
+        <div class="scard__media slider" data-slider>
+          <div class="slider__track"><img src="assets/img/transit-blanc-profil.jpg" alt="Ford Transit Custom blanc, vue de profil" loading="lazy" decoding="async"><img src="assets/img/cargo-vide.jpg" alt="Espace de chargement vide, cloison en place" loading="lazy" decoding="async"><img src="assets/img/chargement-moto.jpg" alt="Moto chargée à l'arrière du Transit Custom" loading="lazy" decoding="async"><img src="assets/img/chargement-velo-route.jpg" alt="Vélo de route chargé dans le fourgon" loading="lazy" decoding="async"><img src="assets/img/transit-blanc-face.jpg" alt="Transit Custom blanc, face avant" loading="lazy" decoding="async"></div>
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Photo précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Photo suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5l7 7-7 7"/></svg></button>
+          <div class="slider__dots" aria-hidden="true"></div>
+          <span class="slider__count" aria-hidden="true">1 / 5</span>
+          <div class="scard__tags"><span class="tag tag--red">Réalisation client</span><span class="tag">Utilitaire & loisirs</span></div>
+        </div>
+        <div class="scard__body"><span class="dim">Ford · Cabine SPECIPRO · Livré à son entreprise</span><h3>Transit Custom — Utilitaire la semaine, moto le week-end</h3><div class="specs"><span>Cloison R1 amovible</span><span>Rails d'arrimage</span><span>2 → 7 places</span><span>TVA récupérable</span></div><div class="scard__foot"><div class="price"><small>Aménagement</small>Sur mesure</div><a class="link link--red" href="amenagements/cabine-approfondie.html">La cabine SPECIPRO <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      </article>
     </div>
   </div>
 </section>

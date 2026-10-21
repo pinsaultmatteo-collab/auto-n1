@@ -219,6 +219,16 @@
     form.addEventListener('change', compute); compute();
   }
 
+  /* ---------- Dimensions : plan coté à trois configurations ---------- */
+  const dPlan = $('#dims-plan svg');
+  if (dPlan) {
+    const tabs = $$('.dtab'), tables = $$('.dim-table--cfg');
+    const presets = { cargo: { seats: 2, wall: true, cargo: true }, seats: { seats: 7, table: true }, folded: { seats: 2, cargo: true } };
+    const pick = i => { tabs.forEach((t, j) => { t.classList.toggle('is-active', j === i); t.setAttribute('aria-selected', j === i); }); setPlanState(dPlan, presets[tabs[i].dataset.preset] || presets.cargo); tables.forEach(t => { t.dataset.col = i; }); };
+    tabs.forEach((t, i) => t.addEventListener('click', () => pick(i)));
+    pick(0);
+  }
+
   /* ---------- Processus (SVG dessiné au scroll) ---------- */
   const proc = $('#process-svg');
   if (proc) {
@@ -313,6 +323,31 @@
     // Les chiffres clés se recomptent au survol
     $$('.stat,.engage__kf,.number,.rating,.kpi,.page-hero__meta>div,.hud').forEach(box => box.addEventListener('mouseenter', () => $$('[data-count]', box).forEach(c => { if (c.dataset.done) countTo(c, 900); })));
   }
+
+  /* ---------- Galeries photo des réalisations ---------- */
+  $$('[data-slider]').forEach(sl => {
+    const track = $('.slider__track', sl), imgs = $$('img', track), dots = $('.slider__dots', sl), count = $('.slider__count', sl);
+    const n = imgs.length; let i = 0;
+    if (n < 2) { sl.classList.add('is-single'); return; }
+    if (dots) dots.innerHTML = imgs.map((_, k) => `<button type="button" aria-label="Photo ${k + 1}"${k === 0 ? ' class="is-on"' : ''}></button>`).join('');
+    const go = k => {
+      i = (k + n) % n; track.style.transform = `translateX(${-i * 100}%)`;
+      if (count) count.textContent = `${i + 1} / ${n}`;
+      if (dots) $$('button', dots).forEach((b, j) => b.classList.toggle('is-on', j === i));
+      [imgs[(i + 1) % n], imgs[(i - 1 + n) % n]].forEach(im => { if (im.loading === 'lazy') im.loading = 'eager'; });
+    };
+    sl.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return; e.preventDefault(); e.stopPropagation();
+      if (b.classList.contains('slider__btn--prev')) go(i - 1); else if (b.classList.contains('slider__btn--next')) go(i + 1); else if (b.parentElement === dots) go($$('button', dots).indexOf(b));
+    });
+    sl.tabIndex = 0;
+    sl.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1); } });
+    let x0 = null, y0 = null;
+    sl.addEventListener('pointerdown', e => { x0 = e.clientX; y0 = e.clientY; }, { passive: true });
+    sl.addEventListener('pointerup', e => { if (x0 == null) return; const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null; if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy)) go(i + (dx < 0 ? 1 : -1)); });
+    // le pointeur avance la galerie : à gauche de la photo = précédente, à droite = suivante
+    sl.addEventListener('mouseenter', () => { if (imgs[1].loading === 'lazy') imgs[1].loading = 'eager'; });
+  });
 
   /* ---------- Année footer ---------- */
   $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());

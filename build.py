@@ -19,8 +19,8 @@ for p in pages:
     meta = dict(re.findall(r'^\s*([a-z]+):\s*(.*?)\s*$', m.group(1), flags=re.M)); body = m.group(2)
     path = meta['path']; depth = path.count('/'); root = '../' * depth
     scripts = ''
-    if 'three' in meta.get('scripts', ''):
-        scripts = f'<script src="{root}assets/vendor/three.min.js"></script>\n<script src="{root}assets/js/van3d.js"></script>'
+    if 'map' in meta.get('scripts', ''):
+        scripts = f'<script src="{root}assets/data/france.js" defer></script>\n<script src="{root}assets/data/clients.js" defer></script>\n<script src="{root}assets/js/map.js" defer></script>'
     vars_ = {'ROOT': root, 'TITLE': meta['title'], 'DESC': meta['description'], 'CANONICAL': meta.get('canonical', path.replace('index.html', '')),
              'OGIMG': meta.get('ogimg', 'showroom-facade.jpg'), 'PAGE': meta.get('page', ''), 'BODYCLASS': meta.get('bodyclass', ''), 'SCRIPTS': scripts}
     html = partials['head'] + partials['nav'] + body + partials['footer']
