@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Archivo-var-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css?v=d4d25ccd">
-<link rel="stylesheet" href="assets/css/main.css?v=1520d099">
+<link rel="stylesheet" href="assets/css/main.css?v=cea48685">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -80,6 +80,7 @@
       </div>
       <div class="nav__item"><a class="nav__link" data-nav="stock" href="stock.html">Stock</a></div>
       <div class="nav__item"><a class="nav__link" data-nav="entreprise" href="entreprise.html">L'atelier</a></div>
+      <div class="nav__item"><a class="nav__link" data-nav="blog" href="blog.html">Blog</a></div>
       <div class="nav__item"><a class="nav__link" data-nav="contact" href="contact.html">Contact</a></div>
     </nav>
     <div class="nav__cta">
@@ -101,7 +102,8 @@
     <div class="sub"><a href="vehicules/ford-transit-custom.html">Ford Transit Custom</a><a href="vehicules/volkswagen-transporter.html">VW Transporter</a></div>
     <a class="big" href="stock.html"><small>04</small>Stock</a>
     <a class="big" href="entreprise.html"><small>05</small>L'atelier</a>
-    <a class="big" href="contact.html"><small>06</small>Contact</a>
+    <a class="big" href="blog.html"><small>06</small>Blog</a>
+    <a class="big" href="contact.html"><small>07</small>Contact</a>
   </div>
   <div class="mobile-menu__foot">
     <a class="btn btn--primary" href="contact.html#devis"><span>Demander un devis</span></a>
@@ -127,14 +129,14 @@
       <form class="form reveal" data-demo>
         <div class="form__fields">
           <span class="eyebrow">Devis personnalisé</span>
-          <h2 class="h3 mt-1" style="font-size:clamp(30px,3vw,44px)">Obtenir un devis personnalisé sous 24h</h2>
+          <h2 class="h3 form__title mt-1">Obtenir un devis personnalisé sous 24h</h2>
           <div class="row mt-2"><div class="field"><label for="c-nom">Nom et prénom *</label><input id="c-nom" class="input" type="text" required autocomplete="name"></div><div class="field"><label for="c-soc">Société</label><input id="c-soc" class="input" type="text" autocomplete="organization"></div></div>
           <div class="row"><div class="field"><label for="c-tel">Téléphone *</label><input id="c-tel" class="input" type="tel" required autocomplete="tel"></div><div class="field"><label for="c-mail">E-mail *</label><input id="c-mail" class="input" type="email" required autocomplete="email"></div></div>
           <div class="row"><div class="field"><label for="c-proj">Votre projet</label><select id="c-proj" class="input"><option>Cabine approfondie 2 à 7 places</option><option>Toit relevable</option><option>Fourgon 4x4</option><option>Aménagement sur mesure</option><option>Véhicule en stock</option><option>Financement</option><option>Autre demande</option></select></div><div class="field"><label for="c-veh">Véhicule</label><select id="c-veh" class="input"><option>Ford Transit Custom</option><option>Volkswagen Transporter</option><option>Autre marque</option><option>Je ne sais pas encore</option></select></div></div>
           <div class="field"><label for="c-msg">Décrivez votre activité et votre usage</label><textarea id="c-msg" class="input" placeholder="Votre métier, ce que vous transportez, le nombre de personnes à bord, vos week-ends…"></textarea></div>
           <div class="row"><label class="opt"><input type="checkbox" name="rdv" value="showroom"><b>Je souhaite voir les véhicules sur rendez-vous <small>À Wimereux ou à Paris — le showroom se visite uniquement sur rendez-vous</small></b></label><label class="opt"><input type="checkbox" name="rappel" value="oui"><b>Rappelez-moi <small>Nous vous appelons sous 24 h</small></b></label></div>
-          <label class="check"><input type="checkbox" required> En soumettant ce formulaire, j'accepte que les informations saisies soient utilisées dans le cadre strict de ma demande, conformément à la <a href="politique-confidentialite.html" style="text-decoration:underline">politique de confidentialité</a>. *</label>
-          <div class="btn-row mt-1"><button class="btn btn--primary btn--lg" type="submit"><span>Envoyer ma demande</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="dim">* Champs obligatoires</span></div>
+          <label class="check"><input type="checkbox" required><span>En soumettant ce formulaire, j'accepte que les informations saisies soient utilisées dans le cadre strict de ma demande, conformément à la <a href="politique-confidentialite.html">politique de confidentialité</a>. *</span></label>
+          <div class="btn-row form__actions"><button class="btn btn--primary btn--lg" type="submit"><span>Envoyer ma demande</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="dim">* Champs obligatoires</span></div>
         </div>
         <div class="form__ok"><span class="eyebrow">Demande envoyée</span><h3 class="h3 mt-1">Merci, nous revenons vers vous sous 24 h.</h3><p class="mt-2" style="color:var(--text-2)">Un dirigeant étudie votre demande et vous rappelle. Pour une réponse immédiate : <a href="tel:+33321336396" style="color:#fff;font-weight:700">03 21 33 63 96</a>.</p></div>
       </form>
@@ -148,19 +150,8 @@
           <ul class="hours"><li><span>Lundi – Vendredi</span><b>8h45 – 18h30 · sur rendez-vous</b></li><li><span>Samedi</span><b>Sur rendez-vous</b></li><li><span>Dimanche</span><b>Fermé</b></li></ul>
         </div>
         <div class="map-card">
-          <svg viewBox="0 0 600 340" fill="none" aria-label="Plan d'accès stylisé au showroom AUTO N°1">
-            <rect width="600" height="340" fill="#17191C"/>
-            <path d="M0 0H336C300 70 262 120 252 170s-22 90-6 170H0z" fill="rgba(255,255,255,.03)"/>
-            <path d="M336 0C300 70 262 120 252 170s-22 90-6 170" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/>
-            <path d="M370 0c-20 70-40 130-46 200s-2 100 10 140" stroke="#C8102E" stroke-width="2" stroke-dasharray="8 6"/>
-            <text x="392" y="30" font-family="Archivo, Arial Narrow, Arial, sans-serif" font-size="14" fill="#C8102E" letter-spacing="1">A16 · sortie Wimereux</text>
-            <path d="M330 236h-52" stroke="rgba(255,255,255,.5)"/><text x="336" y="240" font-family="Archivo, Arial, sans-serif" font-size="11" fill="rgba(255,255,255,.7)">rue du Baston</text>
-            <circle cx="262" cy="236" r="26" class="pulse-ring" stroke="#C8102E" stroke-width="2"/><circle cx="262" cy="236" r="9" fill="#C8102E" stroke="#fff" stroke-width="2"/>
-            <text x="200" y="272" font-family="Archivo, Arial Narrow, Arial, sans-serif" font-size="24" font-weight="800" fill="#fff">AUTO N°1 · WIMEREUX</text>
-            <circle cx="330" cy="46" r="4" fill="rgba(255,255,255,.7)"/><text x="342" y="50" font-family="Archivo, Arial, sans-serif" font-size="12" fill="rgba(255,255,255,.75)">Calais · 30 min</text>
-            <circle cx="256" cy="320" r="4" fill="rgba(255,255,255,.7)"/><text x="268" y="324" font-family="Archivo, Arial, sans-serif" font-size="12" fill="rgba(255,255,255,.75)">Boulogne-sur-Mer · 10 min</text>
-            <text x="40" y="300" font-family="Archivo, Arial, sans-serif" font-size="11" letter-spacing="2" fill="rgba(255,255,255,.4)">MANCHE</text>
-          </svg>
+          <div id="contact-map" class="map-live" data-lat="50.77885" data-lng="1.61788" role="img" aria-label="Carte : AUTO N°1, 30 rue du Baston, 62930 Wimereux"></div>
+          <div class="map-card__foot"><span><i></i>30 rue du Baston · Wimereux</span><a href="https://www.google.com/maps/dir/?api=1&destination=AUTO+N%C2%B01+30+rue+du+Baston+62930+Wimereux" target="_blank" rel="noopener">Itinéraire Google Maps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
         </div>
       </aside>
     </div>
@@ -213,6 +204,7 @@
           <li><a href="vehicules/volkswagen-transporter.html">Volkswagen Transporter aménagé</a></li>
           <li><a href="stock.html">Véhicules en stock &amp; arrivages</a></li>
           <li><a href="entreprise.html">L'atelier</a></li>
+          <li><a href="blog.html">Le blog : conseils &amp; guides</a></li>
         </ul>
       </div>
       <div>
@@ -228,22 +220,18 @@
     <div class="footer__bottom">
       <span>© <span data-year>2026</span> AUTO N 1 — SASU au capital de 3 350 € — SIREN 453 747 859 — Wimereux</span>
       <span class="legal"><a href="mentions-legales.html">Mentions légales</a><a href="politique-confidentialite.html">Politique de confidentialité</a><a href="#" data-consent-open>Gestion des cookies</a></span>
+      <a class="credit" href="https://www.agence-pmc-marketing.com/" target="_blank" rel="noopener" title="PMC Marketing, agence digitale & IA à Toulouse"><span>Site réalisé par</span><img src="assets/brand/pmc-marketing-logo.webp" alt="PMC Marketing" width="606" height="128" loading="lazy" decoding="async"></a>
     </div>
   </div>
-  <a class="credit" href="https://www.agence-pmc-marketing.com/" target="_blank" rel="noopener" aria-label="Site réalisé par PMC Marketing, agence digitale et IA à Toulouse (s'ouvre dans un nouvel onglet)">
-    <span class="container credit__inner">
-      <span class="credit__label">Site réalisé par</span>
-      <img class="credit__logo" src="assets/brand/pmc-marketing-logo.webp" alt="PMC Marketing" width="606" height="128" loading="lazy" decoding="async">
-      <span class="credit__cta">Découvrir l'agence <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-    </span>
-  </a>
 </footer>
 <div class="cookie" role="dialog" aria-live="polite">
   <b>Vos données, votre choix</b>
   <span>Nous utilisons des cookies de mesure d'audience (Google Tag Manager, GA4) pour améliorer ce site. Aucune donnée n'est déposée sans votre accord. <a href="politique-confidentialite.html">En savoir plus</a></span>
   <div class="row"><button class="btn btn--primary btn--sm" data-consent="all"><span>Accepter</span></button><button class="btn btn--ghost btn--sm" data-consent="none"><span>Refuser</span></button></div>
 </div>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+<script src="assets/js/contact-map.js" defer></script>
 <script src="assets/vendor/gsap.min.js"></script>
 <script src="assets/vendor/ScrollTrigger.min.js"></script>
 <script src="assets/js/main.js?v=84c4f7d1"></script>

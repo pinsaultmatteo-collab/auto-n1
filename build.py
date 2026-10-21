@@ -21,6 +21,8 @@ for p in pages:
     scripts = ''
     if 'map' in meta.get('scripts', ''):
         scripts = f'<script src="{root}assets/data/france.js" defer></script>\n<script src="{root}assets/data/clients.js" defer></script>\n<script src="{root}assets/js/map.js" defer></script>'
+    if 'leaflet' in meta.get('scripts', ''):
+        scripts = '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">\n<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>\n' + f'<script src="{root}assets/js/contact-map.js" defer></script>'
     vars_ = {'ROOT': root, 'TITLE': meta['title'], 'DESC': meta['description'], 'CANONICAL': meta.get('canonical', path.replace('index.html', '')),
              'OGIMG': meta.get('ogimg', 'showroom-facade.jpg'), 'PAGE': meta.get('page', ''), 'BODYCLASS': meta.get('bodyclass', ''), 'SCRIPTS': scripts}
     html = partials['head'] + partials['nav'] + body + partials['footer']
