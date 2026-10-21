@@ -308,7 +308,7 @@
     // Projecteur qui suit le pointeur + inclinaison 3D (propriété rotate, lissée en rAF)
     const SPOT = '.tile--service,.engage__tile,.engage__kf,.amen__card,.pillar,.service,.vcard,.review,.scard,.stat,.persona,.mega__card,.info-card,.access>div,.number,.page-hero__meta>div,.soon,.cta-band,.reassure__item,.pricebox,.map-card,.opt,.hud';
     const INVERT = '.tile--service,.engage__tile,.pillar,.review,.access>div,.mega__card';
-    const NOTILT = '.cta-band,.soon,.pricebox,.map-card,.engage__kf,.opt,.number,.hud,.info-card';
+    const NOTILT = '.cta-band,.soon,.pricebox,.map-card,.engage__kf,.opt,.number,.hud,.info-card,.scard'; // les fiches réalisations ne s'inclinent pas : zoom photo seulement
     $$(SPOT).forEach(el => {
       el.classList.add('spot');
       if (!el.matches(INVERT) && lum(el) > 0.5) el.classList.add('spot--light');

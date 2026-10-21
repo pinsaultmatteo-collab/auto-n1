@@ -8,7 +8,9 @@ Maquette fonctionnelle du nouveau site auton1.net, réalisée par PMC Marketing 
 - Ou : `cd site && python3 -m http.server 8790` puis http://localhost:8790
 - Ouvrir directement `site/index.html` fonctionne aussi (tout est en fichiers locaux).
 
-## Charte graphique (v1.0, octobre 2026)
+## Charte graphique (v1.1 / « v2 », octobre 2026)
+
+Logo mis à jour le 21/10/2026 d'après la charte v2 du client (mêmes déclinaisons et proportions, dessin révisé) ; favicons et `og-logo.png` régénérés.
 
 Le site applique la nouvelle charte livrée au client (`charte-graphique/nouvelle-charte/`, hors dépôt) :
 
